@@ -2,85 +2,98 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+var MainAudio = {},
+    context,
+    bufferLoader,
+    audioObj = [];
 
-var context;
-var bufferLoader;
-var source = [];
-var audioBuffer = [];
 
 window.addEventListener('load', init, false);
-
-
-window.onload = function() {
-    audioBuffer[0] = null;
-    loadSound( "audio/r2d2_20.mp3" , 0);
-    loadSound( "audio/r2d2_16.mp3" , 1);
-    loadSound( "audio/r2d2_18.mp3" , 2);
-    loadSound( "audio/r2d2_19.mp3" , 3);
-    $(".audio-player").click( fireOffSound );
-};
-
-function fireOffSound ( e ) { 
-    var soundIndex = $(this).data('sound-index');
-    playSound( audioBuffer[soundIndex] );
-}
 
 function init() {
     window.AudioContext = window.AudioContext||window.webkitAudioContext;
     context = new AudioContext();
 
-//    bufferLoader = new BufferLoader(
-//        context,
-//        [
-//            'audio/r2d2_15.mp3',
-//            'audio/r2d2_16.mp3',
-//            'audio/r2d2_17.mp3',
-//            'audio/r2d2_18.mp3',
-//            'audio/r2d2_19.mp3',
-//        ],
-//        finishedLoading
-//        );
-//
-//    bufferLoader.load();
+    var soundUrls = [   "audio/808KICK.WAV",
+                        "audio/Plastic Zipper Short.wav",
+                        "audio/Switch 02.aif",
+                        "audio/Switch 09.aif",
+                        "audio/Briefcase Latch 2.wav",
+                        "audio/percussion/bongo-hi-edge.wav",
+                        "audio/percussion/bongo-lo-hrd.wav",
+                        "audio/percussion/cowbell.wav",
+                        "audio/percussion/caxixi-1.wav",
+                        "audio/percussion/ping.wav",
+                        "audio/percussion/tamb-hit.wav"
+    ]
+
+    _.each( soundUrls, function ( url, index ) {
+
+        audioObj.push({
+            "index"       : index,
+            "url"         : url,
+            "audioBuffer" : null,
+            "width"       : 0,
+            "trackSize"   : 0,
+            "duration"    : "0 secs",
+            "source"      : null
+        });
+        
+        loadSound( index );
+        var soundButton = "<li class='audio-player audio-button draggable' data-sound-index=" + index + " data-sound-name='sfx'></li>"
+        $(soundButton).appendTo("#samples-container");
+    });
+
+    DragAndDrop.activate();
+    $(".audio-player").click( MainAudio.fireOffSound );
 }
 
-//function finishedLoading(bufferList) {
-//    // Create two sources and play them both together.
-//    source[0] = context.createBufferSource();
-//    source[1] = context.createBufferSource();
-//
-//    source[0].buffer = bufferList[2];
-//    source[1].buffer = bufferList[3];
-//
-//    source[0].connect(context.destination);
-//    source[1].connect(context.destination);
-//    source[0].start(0);
-//    source[1].start(0);
-//
-//}
+function loadSound( index ) {
+    var request = new XMLHttpRequest(),
+        trackWidth = $('.mixing-track').width;
 
-function loadSound(url, index) {
-    var request = new XMLHttpRequest();
-    request.open('GET', url, true);
+    request.open('GET', audioObj[index].url, true);
+    
+    request.buttonIndex = index;
+    
     request.responseType = 'arraybuffer';
 
     // Decode asynchronously
-    request.onload = function() {
+    request.onload = function( ) {
+        
         context.decodeAudioData(request.response, function(buffer) {
-            audioBuffer[index] = buffer;
+            console.log(request);
+            
+            audioObj[request.buttonIndex] = {
+                "index"       : request.buttonIndex,
+                "audioBuffer" : buffer,
+                "width"       : (buffer.duration * 100),
+                "trackSize"   : buffer.duration * 88,
+                "duration"    : buffer.duration.toFixed(1) + " secs"
+            };
+            
         }, onError);
     }
     request.send();
 }
 
-function playSound(buffer) {
-  var source = context.createBufferSource(); // creates a sound source
-  source.buffer = buffer;                    // tell the source which sound to play
-  source.connect( context.destination );       // connect the source to the context's destination (the speakers)
-  source.start(0);                           // play the source now
-                                             // note: on older systems, may have to use deprecated noteOn(time);
-}
 
 function onError ( error ) {
     console.log( error );
+}
+
+
+MainAudio.fireOffSound = function  ( e ) { 
+    var soundIndex = $(this).data('sound-index');
+    MainAudio.playSound( soundIndex );
+}
+
+MainAudio.playSound = function (index) {
+  audioObj[index].source = context.createBufferSource(); 
+  audioObj[index].source.buffer = audioObj[index].audioBuffer;                    
+  audioObj[index].source.connect( context.destination );    
+  audioObj[index].source.start(0);                          
+
+  console.log(audioObj[index]);
+
 }

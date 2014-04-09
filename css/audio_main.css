@@ -36,12 +36,15 @@ ul {
 }
 .sound-clone,
 .audio-button {
-    width           : 100px;
+     display: inline-block;
+   width           : 100px;
     height          : 33px;
     background-color: #888;
     border          : 1px solid;
     border-radius   : 2px;
     margin          : 10px;
+    text-align: center;
+    line-height: 33px;
 }
 
 .audio-button:hover {

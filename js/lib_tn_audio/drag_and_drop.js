@@ -1,8 +1,11 @@
 
-var trackPosition = $('.mixing-track').first().position();
-var startPositionTop = null;
 
-$(document).ready(function() {
+var DragAndDrop = {},
+    trackPosition = $('.mixing-track').first().position(),
+    startPositionTop = null;
+
+
+DragAndDrop.activate = function() {
 
     $( ".draggable" ).draggable({
         revert: 'invalid',
@@ -20,12 +23,15 @@ $(document).ready(function() {
         drop     : dropped
     });
 
-});
+};
 
 function create ( event, ui ) {
     //console.log( 'create', ui );
 }
 function starting ( event, ui ) {
+    
+    var index = $(this).data('sound-index');
+    $(ui.helper).css({ "width" : audioObj[index].trackSize, })
     event.stopPropagation();
     //console.log( "starting", ui.offset.top );
 }
@@ -43,18 +49,24 @@ function stopped ( event, ui ) {
     if( $(this).hasClass('tracked') ) {
         $(this).removeClass('tracked');
         var title = $(ui.helper).data('sound-name');
+        
+        var index = $(this).data('sound-index');
+        
         $(ui.helper).clone(true)
                     .addClass('sound-clone')
                     .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
                     .html( title )
                     .appendTo( $(this).parent().next('.sequence-source') )
+                    .css({ "width" : audioObj[index].trackSize, })
                     .draggable({
                             snap     : '.mixing-track',
                             snapMode : 'inner',
 
                             drop     : soundDropped,
                             stop     : soundStopped,
-                        });
+                        })
+                    .on( 'click', MainAudio.fireOffSound );
+    
     }
 } 
 
