@@ -1,0 +1,107 @@
+/* 
+    Document   : audio_main
+    Created on : Apr 6, 2014, 9:26:57 AM
+    Author     : wiley
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+body {
+    margin: 0px;    
+    width: 100%;
+}
+ul { 
+    list-style      : none;
+    margin-left     : 0px; 
+    padding-left    : 0px;
+} 
+
+.full-page {
+    z-index         : -1;
+    position        : absolute;
+    margin          : 0px;
+    width           : 100%;
+    background-color: #000;
+    min-height      : 100%;
+    opacity         : 0.8;
+}
+#tn-page-contatiner{
+    margin-left:auto;
+    margin-right:auto;
+
+    max-width : 1024px;
+}   
+.page-title {
+    width           : 100%;
+    text-align      : center;
+    font-family     : Helvetica, Arial, sans-serif;
+    padding-top     : 10px;
+}
+.sound-item {
+    display         : inline-block;
+}
+.sound-clone,
+.audio-button {
+    width           : 100px;
+    color           : #ebebeb;
+    
+    &.ui-draggable-dragging {
+        opacity     : 0.8; 
+    }
+}
+.sound-clone {
+    border          : 0px solid;
+    border-radius   : 0px;
+    opacity         : 0.5; 
+}
+// start of track stuff 
+
+
+#track-container{
+    width           : 100%;
+    padding         : 10px;
+    
+}
+.mixing-track {
+    height          : 35px;
+    width           : 100%;
+    margin-bottom   : 10px;
+    padding         : 0px;
+    background      : -webkit-linear-gradient(#454545, #888);
+    background      :      -o-linear-gradient(#454545, #888);
+    background      :    -moz-linear-gradient(#454545, #888);
+    background      :         linear-gradient(#454545, #888); 
+    
+    &.track-hover {
+        background      : -webkit-linear-gradient(#454545, #555); 
+        background      :      -o-linear-gradient(#454545, #555); 
+        background      :    -moz-linear-gradient(#454545, #555); 
+        background      :         linear-gradient(#454545, #555); 
+    }
+}
+.mixing-track {
+
+    .empty {
+        background-color: #dedede;
+    }
+    .indicator {
+        height          : 100%;
+        width           : 0px;
+        border-right    : 1px solid #555;
+        margin-left     : 0px;
+    }
+}
+.control-block{
+    display         : inline-flex;
+    color           : #ebebeb;
+}
+.player-controls{
+    display         : inline-block;
+    margin          : 10px;
+    font-size       : 24px;
+    font-size       : 2.4rem;
+}

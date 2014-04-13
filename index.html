@@ -1,36 +1,52 @@
-
 <!DOCTYPE html>
+
 <html>
     <head>
-        <title>audio projects</title>
+        <title>Thinknoise Sequencer</title>
+        
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="css/audio_main.css">
+        <script data-main="js/lib_tn_audio/main_audio" src="js/lib/require.js"></script>
         
         
+        <link rel="stylesheet" type="text/css" href="css/main_audio.css">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">        
+        <!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
+
     </head>
     <body>
-        <div id="back-panel" class="full-page background-image"></div>
-        <div class="page-title">Dirty Tuba Sound Board project</div>
-        <ul id="samples-container" class="sound-source">
-            <!-- added -->
-        </ul>
-        <ul class="sequence-source"></ul>
-        <ul>
-            <li class="mixing-track empty"></li>
-            <li class="mixing-track empty"></li>
-            <li class="mixing-track empty"></li>
-        </ul>
-        <!-- javascript frameworks -->
-        <script src="//code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-        <script type="text/javascript" src="js/lib/jquery.ui.touch-punch.min.js"></script>
-        <script type="text/javascript" src="js/lib/underscore.js"></script>
-        <script type="text/javascript" src="js/lib/backbone.js"></script>
-        <script type="text/javascript" src="js/lib/buffer-loader.js"></script>
+        <div id="tn-back-panel" class="full-page background-image"></div>
+        
+        <div id="tn-page-contatiner" >
+            <div class="page-title">Thinknoise Sequencer project</div>
 
-        <!-- <script type="text/javascript" src="../js/lib/video-js/video.js"></script> -->
-        <script type="text/javascript" src="js/lib_tn_audio/main.js"></script>
-        <script type="text/javascript" src="js/lib_tn_audio/drag_and_drop.js"></script>
+            <ul id="track-container">
+                <li class="mixing-track empty">
+                    <div class="indicator"></div>
+                    <!--<canvas id="myCanvas" width="800" height="33" style="border:1px solid #444"></canvas> -->
+                </li>
+                <li class="mixing-track empty">
+                    <div class="indicator"></div>
+                </li>
+            </ul>
+            <div class="player-controls">
+                <div id="dt-player-controls" class="control-block">
+                    <span class="control-stop glyphicon glyphicon-stop"></span>
+                    <span class="control-play glyphicon glyphicon-play"></span>
+                </div>
+                <div id="secquener-settings" class="control-block" >
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox"> Loop
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <ul id="samples-container" class="sound-source">
+                <!-- added -->
+            </ul>
+            <ul class="sequence-source">
+            </ul>
+        </div>
     </body>
 </html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Learning the basics of canvas</title>
+<meta charset="utf-8">
+ 
+<script type="text/javascript" src="js/lib/jquery.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+ 
+    function buildGrids(gridPixelSize, color, beats, div) {
+        var canvas = $('#'+div+'').get(0);
+        var ctx = canvas.getContext("2d");
+
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = color;
+
+
+        // horizontal grid lines
+        //for(var i = 0; i <= canvas.height; i = i + gridPixelSize) {//canvas.height
+        //    ctx.beginPath();
+        //   ctx.moveTo(0, i);
+        //   ctx.lineTo(canvas.width, i);
+        //    if(i % parseInt( gridPixelSize * beats ) == 0) {
+        //        ctx.lineWidth = 3;
+        //    } else {
+        //        ctx.lineWidth = 0.5;
+        //    }
+        //    ctx.closePath();
+        //    ctx.stroke();
+        //}
+
+        // vertical grid lines
+        for(var j = 0; j <= canvas.width; j = j + gridPixelSize) {
+            ctx.beginPath();
+            ctx.moveTo(j, 0);
+            ctx.lineTo(j, canvas.height);
+            if(j % parseInt( gridPixelSize * beats ) == 0) {
+                ctx.lineWidth = 3;
+            } else {
+                ctx.lineWidth = 0.5;
+            }
+            ctx.closePath();
+            ctx.stroke();
+        }
+
+    }
+
+    buildGrids(30, "#444444", 4, "myCanvas");
+
+});
+</script>
+</head>
+ 
+<body>
+<div>Canvas Experiment</div>
+<canvas id="myCanvas" width="800px" height="33" style="border:1px solid #444">
+Browser does not support canvas
+</canvas>
+ 
+ 
+</body>
+</html>
