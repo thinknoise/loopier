@@ -1,1 +1,153 @@
-root{display:block}body{margin:0;width:100%}ul{list-style:none;margin-left:0;padding-left:0}.full-page{z-index:-1;position:absolute;margin:0;width:100%;background-color:#000;min-height:100%;opacity:.8}#tn-page-contatiner{margin-left:auto;margin-right:auto;max-width:1024px}.page-title{width:100%;text-align:center;font-family:Helvetica,Arial,sans-serif;padding-top:10px}.sound-item{display:inline-block}.sound-clone,.audio-button{width:100px;color:#ebebeb}.sound-clone.ui-draggable-dragging,.audio-button.ui-draggable-dragging{opacity:.8}.sound-clone{border:0 solid;border-radius:0;opacity:.5}#track-container{width:100%;padding:10px}.mixing-track{height:35px;width:100%;margin-bottom:10px;padding:0;background:-webkit-linear-gradient(#454545,#888);background:-o-linear-gradient(#454545,#888);background:-moz-linear-gradient(#454545,#888);background:linear-gradient(#454545,#888)}.mixing-track.track-hover{background:-webkit-linear-gradient(#454545,#555);background:-o-linear-gradient(#454545,#555);background:-moz-linear-gradient(#454545,#555);background:linear-gradient(#454545,#555)}.mixing-track .empty{background-color:#dedede}.mixing-track .indicator{height:100%;width:0;border-right:1px solid #555;margin-left:0}.control-block{display:inline-flex;color:#ebebeb}.player-controls{display:inline-block;margin:10px;font-size:24px;font-size:2.4rem}
+/* 
+    Document   : audio_main
+    Created on : Apr 6, 2014, 9:26:57 AM
+    Author     : wiley
+    Description: Main less file for master css
+*/
+root {
+  display: block;
+}
+body {
+  margin: 0px;
+  width: 100%;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #000;
+  background-color: #181818;
+}
+h1 {
+  font-size: 18px;
+  font-size: 1.8rem;
+}
+ul {
+  list-style: none;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+#tn-page-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1024px;
+}
+#tn-page-container .page-title {
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+  color: #ebebeb;
+}
+#tn-page-container #tn-samples-container .sound-bank-wrap {
+  margin: 5px 4px;
+  text-align: center;
+}
+#tn-page-container #tn-samples-container .sound-item {
+  display: inline-block;
+}
+#tn-page-container .sound-clone,
+#tn-page-container .audio-button {
+  width: 100px;
+  line-height: 20px;
+  margin: 2px;
+}
+#tn-page-container .sound-clone.ui-draggable-dragging,
+#tn-page-container .audio-button.ui-draggable-dragging {
+  opacity: 0.8;
+}
+#tn-page-container #track-container {
+  width: 100%;
+  padding: 10px;
+  color: #ebebeb;
+}
+#tn-page-container #track-container .sound-clone {
+  opacity: 0.5;
+}
+#tn-page-container #track-container .mixing-track {
+  height: 35px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0px;
+  border: 1px solid #454545;
+  background: -webkit-linear-gradient(#777777, #888888);
+  background: -o-linear-gradient(#777777, #888888);
+  background: -moz-linear-gradient(#777777, #888888);
+  background: linear-gradient(#777777, #888888);
+}
+#tn-page-container #track-container .mixing-track.track-hover {
+  background: -webkit-linear-gradient(#888888, #a1a1a1);
+  background: -o-linear-gradient(#888888, #a1a1a1);
+  background: -moz-linear-gradient(#888888, #a1a1a1);
+  background: linear-gradient(#888888, #a1a1a1);
+  border: 1px solid #ebebeb;
+}
+#tn-page-container #track-container .mixing-track.empty {
+  background-color: #dedede;
+}
+#tn-page-container #track-container .mixing-track .indicator {
+  height: 100%;
+  width: 0px;
+  border-right: 1px solid #FFF;
+  margin-left: 0px;
+}
+#tn-page-container #tn-controls-container .control-block {
+  align: center;
+  color: #dedede;
+}
+#tn-page-container #tn-controls-container .control-block .player-controls {
+  display: inline-block;
+  margin: 10px;
+  font-size: 20px;
+  font-size: 2.0rem;
+}
+.container-fluid {
+  padding: 0px;
+}
+@media (min-width: 480px) {
+  body {
+    background-color: #212121;
+  }
+  h1 {
+    font-size: 24px;
+    font-size: 2.4rem;
+  }
+  .container-fluid {
+    padding: 10px 15px;
+  }
+  #tn-samples-container .sound-item {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+  #tn-page-container .sound-clone,
+  #tn-page-container .audio-button {
+    width: 120px;
+    margin: 5px;
+  }
+}
+@media (min-width: 768px) {
+  body {
+    background-color: #454545;
+  }
+  h1 {
+    font-size: 32px;
+    font-size: 3.2rem;
+  }
+  #tn-samples-container .sound-item {
+    padding-left: 17px;
+    padding-right: 17px;
+  }
+  #tn-page-container .sound-clone,
+  #tn-page-container .audio-button {
+    width: 140px;
+    margin: 5px 10px;
+  }
+}
+@media (min-width: 1024px) {
+  body {
+    background-color: #555555;
+  }
+  h1 {
+    font-size: 48px;
+    font-size: 4.8rem;
+  }
+  #tn-samples-container .sound-item {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}

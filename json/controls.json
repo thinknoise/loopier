@@ -1,0 +1,22 @@
+[
+    {
+        "type"  : "stop-btn",
+        "contolClass" : "control-stop",
+        "buttonIcon"  : "fa fa-stop"
+    },
+    {
+        "type"  : "play-btn",
+        "contolClass" : "control-play",
+        "buttonIcon"  : "fa fa-play"
+    },
+    {
+        "type"  : "check-box",
+        "contolClass" : "control-play",
+        "buttonIcon"  : "fa fa-check"
+    },
+    {
+        "type"  : "mail-btn",
+        "contolClass" : "control-share",
+        "buttonIcon"  : "fa fa-mail"
+    }
+]

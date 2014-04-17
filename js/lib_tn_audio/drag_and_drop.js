@@ -11,9 +11,8 @@ define([
 
      var DragAndDrop = {
          
-        activate : function( AudioMain ) {
-
-           $( ".draggable" ).draggable({
+        activate : function( $this ) {
+           $this.find( ".draggable" ).draggable({
                revert   : 'invalid',
                helper   : "clone",
                snap     : '.mixing-track',
@@ -33,18 +32,13 @@ define([
            return true;
        },
 
-       create : function  ( event, ui ) {
-           //console.log( 'create', ui );
-           return true;
-       },
+       create : function  ( event, ui ) { return true; },
        starting : function  ( event, ui ) {
-
            event.stopPropagation();
            var index = $(this).data('sound-index'),
-               soundLength = TN_Sequencer.getSoundLength( index );
+               soundLength = TN_sndbank.models[ index ].get('sndDuration') *88;
        
            $(ui.helper).css({ "width" : soundLength })
-           //console.log( "starting", ui.offset.top );
            return true;
         },
         dragging : function  ( event, ui ) {
@@ -57,7 +51,6 @@ define([
             $(this).removeClass('track-hover')
         },
         dropped : function  ( event, ui ) {
-           //console.log( 'dropped', ui );
             $(this).removeClass('track-hover')
             $(this).removeClass( "empty" );
 
@@ -74,26 +67,26 @@ define([
            if( $this.hasClass('tracked') ) {
                $this.removeClass('tracked');
                
-               var title = $(ui.helper).data('sound-name'),
+               var $uiHelper = $(ui.helper),
+                   title = $uiHelper.data('sound-name'),
                    index = $this.data('sound-index'),
-                   soundLength = TN_Sequencer.getSoundLength( index );
+                   soundLength = TN_sndbank.models[ index ].get('sndDuration') *88;
 
-               $(ui.helper).clone(true)
-                           .addClass('sound-clone')
-                           .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
-                           .html( title )
-                           .appendTo( $('#track-container .mixing-track.currentReciever') )
-                           .css({ "width" : soundLength, })
-                           .draggable({
-                                   snap     : '.mixing-track',
-                                   snapMode : 'inner',
-
-                                   drop     : DragAndDrop.soundDropped,
-                                   stop     : DragAndDrop.soundStopped,
-                               })
-                           .on( 'click', TN_Sequencer.fireOffSound );
+               $uiHelper.find('.sound-name').remove();
+               $uiHelper.clone(true)
+                        .addClass('sound-clone glyphicon glyphicon-play' ) //
+                        .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
+                        .css({ "width" : soundLength,  })
+                        .appendTo( $('#track-container .mixing-track.currentReciever') )
+                        .draggable({
+                            snap     : '.mixing-track',
+                            snapMode : 'inner',
+                            drop     : DragAndDrop.soundDropped,
+                            stop     : DragAndDrop.soundStopped,
+                        })
+                        .on( 'click', TNSQ.fireOffSound );
                $('#track-container .mixing-track').removeClass('currentReciever');
-               //TN_Sequencer.startSequence();
+               //TNSQ.startSequence();
            }
        },
        soundDropped : function ( event, ui ) {

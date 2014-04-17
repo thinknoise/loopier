@@ -5,46 +5,31 @@
         <title>Thinknoise Sequencer</title>
         
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <script data-main="js/lib_tn_audio/main_audio" src="js/lib/require.js"></script>
         
-        
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">    
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">    
         <link rel="stylesheet" type="text/css" href="css/main_audio.css">
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">        
-        <!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
+        
+        
+ <!--       <link rel="stylesheet" href="css/bootstrap-responsive.min.css">        
+        <link rel="stylesheet" href="css/bootstrap.icon-large.min.css">        
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<!--<link href="assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
 
     </head>
     <body>
-        <div id="tn-back-panel" class="full-page background-image"></div>
-        
-        <div id="tn-page-contatiner" >
-            <div class="page-title">Thinknoise Sequencer project</div>
+        <div id="tn-page-container" >
+            <h1 class="page-title">Thinknoise Sequencer project</h1>
 
-            <ul id="track-container">
-                <li class="mixing-track empty">
-                    <div class="indicator"></div>
-                    <!--<canvas id="myCanvas" width="800" height="33" style="border:1px solid #444"></canvas> -->
-                </li>
-                <li class="mixing-track empty">
-                    <div class="indicator"></div>
-                </li>
-            </ul>
-            <div class="player-controls">
-                <div id="dt-player-controls" class="control-block">
-                    <span class="control-stop glyphicon glyphicon-stop"></span>
-                    <span class="control-play glyphicon glyphicon-play"></span>
-                </div>
-                <div id="secquener-settings" class="control-block" >
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox"> Loop
-                        </label>
-                    </div>
-                </div>
+            <div id="tn-controls-container"></div>
+            
+            <div id="tn-tape-reel"></div>
+            
+            <div id="tn-samples-container" class="container-fluid">
+                    <!-- added -->
             </div>
-            <ul id="samples-container" class="sound-source">
-                <!-- added -->
-            </ul>
             <ul class="sequence-source">
             </ul>
         </div>

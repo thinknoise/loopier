@@ -1,0 +1,12 @@
+[
+    {
+        "channel_id": 1,
+        "volume"    : 1,
+        "pan"       : 1
+    },
+    {
+        "channel_id": 2,
+        "volume"    : 1,
+        "pan"       : 0.5
+    }
+]
