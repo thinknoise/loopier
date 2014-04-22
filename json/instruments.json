@@ -4,83 +4,83 @@
         "url"       : "audio/808KICK.WAV",
         "name"      : "808 Kick",
         "icon"      : "icon icon-bomb",
-        "glyphicon" : "glyphicon-exclamation-sign"
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
         "snd_id"    : 1,
         "url"       : "audio/Can of Soda Opened.wav",
         "name"      : "Flip Top",
         "icon"      : "icon icon-can",
-        "glyphicon" : "glyphicon-sort-by-attributes-alt"
+        "glyphicon" : "glyphicon glyphicon-sort-by-attributes-alt"
     },
     {
         "snd_id"    : 2,
         "url"       : "audio/Plastic Zipper Short.wav",
         "name"      : "Zipper",
         "icon"      : "icon icon-sweater",
-        "glyphicon" : "glyphicon-sort-by-attributes-alt"
+        "glyphicon" : "glyphicon glyphicon-sort-by-attributes-alt"
     },
     {
         "snd_id"    : 3,
         "url"       : "audio/Water Drip 02.wav",
         "name"      : "Drip",
         "icon"      : "icon icon-tint",
-        "glyphicon" : "glyphicon-tint"
+        "glyphicon" : "glyphicon glyphicon-tint"
     },
     {
         "snd_id"    : 4,
         "url"       : "audio/Switch 09.wav",
         "name"      : "Switch",
         "icon"      : "icon-briefcase", 
-        "glyphicon" : "glyphicon-briefcase"
+        "glyphicon" : "glyphicon glyphicon-briefcase"
     },
     {
         "snd_id"    : 5,
         "url"       : "audio/Briefcase Latch 2.wav",
         "name"      : "Latch",
         "icon"      : "icon-briefcase",
-        "glyphicon" : "glyphicon-briefcase"
+        "glyphicon" : "glyphicon glyphicon-briefcase"
     },
     {
         "snd_id"    : 6,
         "url"       : "audio/percussion/bongo-hi-edge.wav",
         "name"      : "Bongo hi",
         "icon"      : "icon-pushpin",
-        "glyphicon" : "glyphicon-pushpin"
+        "glyphicon" : "glyphicon glyphicon-pushpin"
     },
     {
         "snd_id"    : 7,
         "url"       : "audio/percussion/bongo-lo-hrd.wav",
         "name"      : "Bongo low",
         "icon"      : "icon-globe",
-        "glyphicon" : "glyphicon-globe"
+        "glyphicon" : "glyphicon glyphicon-globe"
     },
     {
         "snd_id"    : 8,
         "url"       : "audio/percussion/cowbell.wav",
         "name"      : "Cowbell",
         "icon"      : "icon-map-marker",
-        "glyphicon" : "glyphicon-map-marker"
+        "glyphicon" : "glyphicon glyphicon-map-marker"
     },
     {
         "snd_id"    : 9,
-        "url" :"audio/percussion/caxixi-1.wav",
-        "name":"Caxixi",
-        "icon":"icon-grater",
-        "glyphicon":"glyphicon-certificate"
+        "url"       : "audio/percussion/caxixi-1.wav",
+        "name"      : "Caxixi",
+        "icon"      : "icon-grater",
+        "glyphicon" : "glyphicon glyphicon-certificate"
     },
     {
         "snd_id"    : 10,
-        "url" :"audio/percussion/ping.wav",
-        "name":"pingpong",
-        "icon":"icon-table-tennis",
-        "glyphicon":"glyphicon-exclamation-sign"
+        "url"       : "audio/percussion/ping.wav",
+        "name"      : "pingpong",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
         "snd_id"    : 11,
-        "url" :"audio/percussion/tamb-hit.wav",
-        "name":"Tamborine",
-        "icon":"icon-table-tennis",
-        "glyphicon":"glyphicon-glyphicon-screenshot"
+        "url"       : "audio/percussion/tamb-hit.wav",
+        "name"      : "Tamborine",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-screenshot"
     }
 ]

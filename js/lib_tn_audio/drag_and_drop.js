@@ -53,7 +53,11 @@ define([
         dropped : function  ( event, ui ) {
             $(this).removeClass('track-hover')
             $(this).removeClass( "empty" );
-
+            
+            // TODO: get the play tooltip to show up
+            //$( ".selector" ).tooltip({ show: { effect: "blind", duration: 800 } });
+            //$('.control-play').tooltip( "option", "show", { effect: "blind", duration: 800 } );
+            
            //to communicate which track recieved the sound
            $(this).addClass( "currentReciever" );
 

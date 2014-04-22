@@ -70,7 +70,7 @@ require([
         },
         initialize : function(){
             //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
-            _.bindAll(this, 'playSound');
+            _.bindAll(this, 'playSound' );
         },
         // the Model Plays/schedules its own sound 
         playSound : function ( time ) {
@@ -78,6 +78,7 @@ require([
             source.buffer = this.get('audioBuffer'); 
             //source.loop = true;
             source.connect( context.destination );    
+            //console.log( context.currentTime );    
             source[ source.start ? 'start' : 'noteOn'](time + context.currentTime);
         }
     });
@@ -95,111 +96,46 @@ require([
         // TODO: maybe line up sequences here
     });
     
+    // CONTROL KNOBS being called with the model
     var KnobView = Backbone.View.extend({
         tagName    : 'li',
-        className  : 'player-controls',
+        className  : 'player-controls list-inline',
         template   : null,
-        events     : {
-            "click .control-play" : "onClick",
-        },
+        state      : "default",
+        events     : {},
         initialize : function(){
-            _.bindAll(this, 'render');
-
+            _.bindAll(this, 'render' );
+            
             this.template = _.template(
-                "<span class='<%= contolClass %> <%= buttonIcon %>'></span>"
+                "<span title='<%= altText %>' class='<%= contolClass %> <%= buttonIcon %> '></span>"
             );
         },
         render : function(){
             $(this.el).html( this.template( this.model.toJSON() ) );
-        },
-        onClick : function ( ) {
-    
-            TNSQ.startSequence;
-            // TODO: lastthing of the night -  playSequence 
         }
     });
     
-
-    var ChannelView = Backbone.View.extend({
-        tagName    : 'li',
-        className  : 'mixing-track empty',
-        template   : null,
-        events     : {},
-        initialize : function(){
-            _.bindAll(this, 'render', 'playSequence' );
-
-            this.template = _.template(
-                "<div class='indicator'></div>"
-            );
-        },
-        render : function(){
-            $(this.el).html( this.template( this.model.toJSON() ) );
-        },
-        playSequence : function () {
-            //TODO: make tracks specific to sounds and onClick clones a new snd on the track
-        },
-    });
     
-    var InstrumentView = Backbone.View.extend({
-         tagName    : 'li',
-         className  : 'sound-item',
-         template   : null,
-         events     : {
-             "click .audio-player" : "onClick",
-             "draggable .draggable": "dragging"
-         },
-
-         initialize : function(){
-             //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
-             _.bindAll(this, 'render');
-
-             //later we will see complex template engines, but is the basic from underscore
-             this.template = _.template(
-                 "<div class='btn btn-primary audio-player audio-button draggable' data-sound-index='<%= snd_id %>' data-sound-name='<%= name %>'>" +
-                     "<div class='sound-name'><%= name %></div>" +
-                 "</div>"                
-             );
-         },
-         render : function(){
-             $(this.el).html( this.template( this.model.toJSON() ) );
-             DragAndDrop.activate( $(this.el) );
-         },
-         onClick : function () {
-             this.model.playSound();
-         },
-     });
-     
-    //We define the collection, associate the map for every item in the list
-    var ControlCollection = Backbone.Collection.extend({
-        model: KnobModel,
-        url: 'json/controls.json'
-    });
-
-    var InstrumentCollection = Backbone.Collection.extend({
-        model: InstrumentModel,
-        url: 'json/instruments.json'
-    });
-
-    var ChannelCollection = Backbone.Collection.extend({
-        model: ChannelModel,
-        url: 'json/channel.json'
-    });
-
     //Main View for the list
     var ControlPanel = Backbone.View.extend({
         id         : "dt-player-controls",
         tagName    : "ul", 
-        className  : "control-block", 
-        events : {},
+        className  : "control-block",
+        events : {
+            "click .control-play"   : "onPlaySequence",
+            "click .control-loop"   : "onChangeLoopState",
+            "click .control-stop"   : "onLastCall",
+            "click .control-reset"  : "onResetTracks",
+        },
         initialize : function(){
-            _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render');
+            _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onChangeLoopState', 'onLastCall', 'setPlayButtonToPlay', 'onResetTracks' );
             this.collection.bind('add', this.addItemHandler);
         },
         load : function(){      // AJAX Request
             this.collection.fetch({
                 add: true,
                 success: this.loadCompleteHandler,
-                error: this.errorHandler
+                error: this.errorHandler,
             });
         },  
         //once per item in list
@@ -218,7 +154,208 @@ require([
             $('#tn-controls-container').append($(this.el));
             return this;
         },
+        onPlaySequence : function ( event ) {
+    
+            var index = 0,
+                controlClass = this.collection.models[index].get("contolClass"),
+                defaultIcon  = this.collection.models[index].get("buttonIcon"),
+                toggleIcon   = this.collection.models[index].get("toggleIcon"),
+                toggleClass  = this.collection.models[index].get("toggleClass"),
+                playButtonState = this.collection.models[1].get("state");
+        
+            // if loop buttton state is on set loopState to true
+            if (playButtonState === 'default' || playButtonState === 'looping') {
+                this.collection.models[1].set("state", 'looping' )
+                TN_tapereel.loopState = true;
+            }
+            $(event.target)
+                    .removeClass( defaultIcon )
+                    .removeClass( controlClass )
+                    .addClass( toggleIcon )
+                    .addClass( toggleClass );
+            
+            TN_tapereel.startSequence();
+        },
+        onChangeLoopState : function ( event ) {
+            //console.log(this.collection.models[1].get("contolClass"), $(event.target) )
+            var index = 1,
+                controlClass = this.collection.models[index].get("contolClass"),
+                defaultIcon  = this.collection.models[index].get("buttonIcon"),
+                toggleIcon   = this.collection.models[index].get("toggleIcon"),
+                toggleClass  = this.collection.models[index].get("toggleClass"),
+                playButtonState = this.collection.models[1].get("state");
+        
+            if ( playButtonState === 'looping' ) {
+                this.collection.models[1].set("state", 'oneshot' )
+                TN_tapereel.loopState = false;
+                $(event.target)
+                       .removeClass( defaultIcon )
+                       .removeClass( controlClass )
+                       .removeClass( 'danger') 
+                       .addClass( toggleClass )
+                       .addClass( toggleIcon );
+            } else {
+                this.collection.models[1].set("state", 'looping' );
+                TN_tapereel.loopState = true;
+                //this.onStopSequence();
+                // flip play button to play state
+                
+                $(event.target)
+                       .removeClass( toggleIcon )
+                       .removeClass( toggleClass )
+                       .removeClass( 'danger') 
+                       .addClass( defaultIcon )
+                       .addClass( controlClass );
+            }
+            console.log( 'loopState: ' + this.collection.models[1].get("state") )
+        },
+                // not there yet
+        onLastCall : function ( event ) {
+            $(event.target).find('span').addClass( 'danger' ).removeClass( this.collection.models[0].get("toggleClass") );
+            TN_tapereel.loopState = false;
+            this.setPlayButtonToPlay( event )
+        },
+        setPlayButtonToPlay : function ( event ) {
+            var index = 0,
+                controlClass = this.collection.models[index].get("contolClass"),
+                defaultIcon  = this.collection.models[index].get("buttonIcon"),
+                toggleIcon   = this.collection.models[index].get("toggleIcon"),
+                toggleClass  = this.collection.models[index].get("toggleClass");
+        
+            $(this.el).find('.control-stop')
+                    .removeClass( toggleClass )
+                    .removeClass( toggleIcon )
+                    .removeClass( 'danger') 
+                    .addClass( defaultIcon )
+                    .addClass( controlClass );
+        },
+        onResetTracks : function ( ) {
+            TN_tapereel.onClearTapeReel();
+        }
     });
+
+    var ChannelView = Backbone.View.extend({
+        tagName    : 'li',
+        className  : 'mixing-track empty',
+        template   : null,
+        events     : {},
+        initialize : function(){
+            _.bindAll(this, 'render', 'playSequence', 'onDropped' );
+            
+           $(this.el).droppable({
+               over     : this.onOvered,
+               out      : this.onOuted,
+               drop     : this.onDropped
+           });
+
+
+            this.template = _.template(
+                "<div class='indicator'></div>"
+            );
+        },
+        render : function(){
+            $(this.el).html( this.template( this.model.toJSON() ) );
+        },
+        // TODO: ??
+        renderClone : function( track, pos ){
+            console.log( track, pos )
+        },
+        playSequence : function () {
+            //TODO: make tracks specific to sounds and onClick clones a new snd on the track
+        },
+        onOvered : function ( event, ui ) {
+            $(this).addClass('track-hover');
+        },
+        onOuted : function ( event, ui ) {
+            $(this).removeClass('track-hover');
+        },
+        onDropped : function  ( event, ui ) {
+            // the eagle has landed
+            var $this = $(this.el);
+                
+            $this.removeClass('track-hover')
+                 .removeClass( "empty" )
+            
+            var $uiHelper = $(ui.helper);
+            
+            $uiHelper.find('.sound-name').remove();
+            $uiHelper.clone(true)
+                     .addClass('sound-clone ' + $uiHelper.data('icon') ) //
+                     .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
+                     .css({ "padding-left" : "3px", "text-align": "left" })
+                     .appendTo( $this )
+                     .draggable({
+                        snap     : '.mixing-track',
+                        snapMode : 'inner',
+                        drop     : DragAndDrop.soundDropped,
+                        stop     : DragAndDrop.soundStopped,
+                     })
+                     .on( 'click', TNSQ.fireOffSound );
+        }
+    });
+    
+    // called with its Own Model
+    var InstrumentView = Backbone.View.extend({
+        tagName    : 'li',
+        className  : 'sound-item',
+        template   : null,
+        events     : {
+            "click .audio-player" : "onClick",
+        },
+
+        initialize : function(){
+            _.bindAll(this, 'render', 'onStarting', 'onDragging' );
+            
+            if(this.model) {
+                this.model.on('change',this.render,this);
+            }
+
+            //later we will see complex template engines, but is the basic from underscore
+            this.template = _.template(
+                "<div class='btn btn-primary audio-player audio-button draggable' data-sound-index='<%= snd_id %>' data-icon='<%= glyphicon %>' data-sound-name='<%= name %>'>" +
+                    "<div class='sound-name'><%= name %></div>" +
+                "</div>"                
+            );
+        },
+        render : function(){
+            $(this.el).html( this.template( this.model.toJSON() ) );
+
+            $(this.el).find('.audio-player').draggable({
+                revert   : 'invalid',
+                helper   : "clone",
+                snap     : '.mixing-track',
+                snapMode : 'inner',
+
+                //create   : DragAndDrop.create,
+                start    : this.onStarting, //that.model.onStart,
+                drag     : this.onDragging,
+            });
+        },
+        onClick : function () {
+            this.model.playSound();
+        },
+        onStarting : function ( event, ui ) {
+            $(ui.helper).css({ 'width': this.model.get('width') });
+        },
+        onDragging : function () {},
+    });
+     
+    //We define the collection, associate the map for every item in the list
+    var ControlCollection = Backbone.Collection.extend({
+        model: KnobModel,
+        url: 'json/controls.json'
+    });
+
+    var InstrumentCollection = Backbone.Collection.extend({
+        model: InstrumentModel,
+        url: 'json/instruments.json'
+    });
+
+    var ChannelCollection = Backbone.Collection.extend({
+        model: ChannelModel,
+        url: 'json/channel.json'
+    });
+
     var SoundBank = Backbone.View.extend({
         id         : "samples-table",
         tagName    : "ul", 
@@ -253,8 +390,6 @@ require([
             console.log('loaded SoundBank without errors!');
             this.render();
 
-            // TODO: Build TrackModel
-            $(".control-play").click( TNSQ.startSequence );
         },
 
         errorHandler : function(){
@@ -298,27 +433,28 @@ require([
         },
     });
     
-    var TapeReel = Backbone.View.extend({
+    var TapeReelView = Backbone.View.extend({
         id         : "track-container",
         tagName    : "ul", 
+        totalTime  : 2000,
+        loopState  : true,
         events : {},
         initialize : function(){
-            _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render');
+            _.bindAll(this, 'addItemHandler', 'loadCompleteHandler', 'startSequence', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
         },
         load : function(){
             // AJAX Request
             this.collection.fetch({
-                add: true,
-                success: this.loadCompleteHandler,
-                error: this.errorHandler
+                add     : true,
+                success : this.loadCompleteHandler,
+                error   : this.errorHandler
             });
         },  
         //we arrived  per item in list
         addItemHandler : function( model ){
             //model is an instance of ChannelView -tracks
             var channelView = new ChannelView({ model:model });
-
             channelView.render();
             $(this.el).append(channelView.el);
         },
@@ -328,7 +464,79 @@ require([
             this.render();
         },
         errorHandler : function(){ throw "Error loading JSON file"; },
+        startSequence : function ( e ) {
 
+            var $track       = this.$el.find('.mixing-track'),
+                $clones      = this.$el.find('.sound-clone'),
+                trackLength  = parseInt( $track.width() ),
+                leftOffset   = this.$el.offset().left,
+                timeLength   = this.totalTime,
+                loopSchedule = [];
+
+            $clones.each( function () {
+
+                var $clone         = $(this),
+                    soundIndex     = $clone.data('sound-index'),
+                    left           = parseInt( $clone.css('left') ) - leftOffset,
+                    percentOfTime  = left/trackLength,
+                    startEventTime = ( (timeLength/1000) * percentOfTime );
+                    
+                //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
+                loopSchedule.push({
+                    instmodel   : TN_sndbank.models[ soundIndex ],
+                    time        : startEventTime
+                });
+            });
+            
+            this.playSchedule( loopSchedule );
+            //LOOPING
+//            setTimeout(function(){
+//                TNSQ.playSchedule( loopSchedule );
+//            },TNSQ.totalTime);
+
+        },
+        playSchedule : function ( seqSchedule ) {
+
+            _.each(seqSchedule, function ( seqItem ) {
+                seqItem.instmodel.playSound( seqItem.time);
+            });
+            
+            var $track      = this.$el.find('.mixing-track'),
+                trackLength = parseInt( $track.width() ),
+                self = this;
+        
+            this.$el.find('.indicator').stop().css({ "margin-left" : 0 }).animate({ 
+                    "margin-left" : trackLength 
+                }, 
+                this.totalTime, 
+                "linear",
+                function () {
+                    console.log(self.loopState);
+                    if(self.loopState) {
+                        self.startSequence();
+                    } else {
+                        self.stopSequence();
+                    }
+                }
+            );
+            
+        },
+        stopSequence : function () {
+            this.$el.find('.indicator').stop().css({ "margin-left" : 0 });
+            // and reset playbutton
+            TN_controls.setPlayButtonToPlay();
+        },
+        onClearTapeReel : function () {
+            var $tracks = $(this.el).find('.mixing-track');
+            _.each($tracks, function ( track, index ) {
+                if( !$(track).hasClass('empty') ) {
+                    var clones = $(track).find('.sound-clone');
+                    _.each( clones, function(clone) {
+                        $(clone).remove()
+                    })
+                }
+            });
+        },
         render : function(){
             //we assign our element into the available dom element
             $('#tn-tape-reel').append($(this.el));
@@ -339,15 +547,15 @@ require([
     
     //Backbone code - end
 
-    // create the instance of track collection:
+    // create the instance of control collection:
     var controlCollection = new ControlCollection();
     var controlPanel = new ControlPanel({ collection: controlCollection });
     controlPanel.load();
 
     // create the instance of track collection:
     var channelCollection = new ChannelCollection();
-    var tapeReel = new TapeReel({ collection: channelCollection });
-    tapeReel.load();
+    var tapeReelView = new TapeReelView({ collection: channelCollection });
+    tapeReelView.load();
 
     // create the instance of soundBank collection:
     var instrumentCollection = new InstrumentCollection();
@@ -355,102 +563,18 @@ require([
     soundBank.load();
 
     
-
-
     var TNSQ = {
-
-        audioObj    : [],
-        totalTime   : 5000,
-        
         start : function () {
             
             window.AudioContext = window.AudioContext||window.webkitAudioContext;
             context = new AudioContext();
-
-            var data = { },
-                InstrumentBank = [];
-            
-            //$.getJSON( "json/instruments.json", TNSQ.onLoadInstrumentUrlsSuccess );
             return TNSQ;
         },
-        
-        playSchedule : function ( seqSchedule ) {
-
-            _.each(seqSchedule, function ( seqItem ) {
-                seqItem.instmodel.playSound( seqItem.time);
-            });
-            TNSQ.onPlayUI();
-            
-        },
-
-        onPlayUI : function ( ) {
-
-            var $track      = $('.mixing-track'),
-                $playBtn    = $('.control-play'),
-                $indicator  = $('.indicator'),
-                trackLength = parseInt( $track.width() );
-
-            //switch the icons
-            $playBtn.removeClass('glyphicon-play');
-            $playBtn.addClass('glyphicon-pause');
-
-            $indicator.animate({ 
-                    "margin-left" : trackLength 
-                }, 
-                TNSQ.totalTime, 
-                "linear",
-                function () {
-                    $(this).css({ "margin-left" : 0 });
-                    TNSQ.onPauseUI();
-                }
-            );
-        },
-        onPauseUI : function () {
-            var $playBtn    = $('.control-play');
-
-            $playBtn.removeClass('glyphicon-pause');
-            $playBtn.addClass('glyphicon-play');
-
-        },
-
-        startSequence : function ( e ) {
-
-            var $track      = $('.mixing-track'),
-                $clones     = $('.sound-clone'),
-                trackLength = parseInt( $track.width() ),
-                
-                loopSchedule = [];
-
-            $clones.each( function () {
-
-                var $clone         = $(this),
-                    soundIndex     = $clone.data('sound-index'),
-                    left           = parseInt( $clone.css('left') ) - $("#track-container").offset().left,
-                    percentOfTime   = left/trackLength,
-                    startEventTime = ( (TNSQ.totalTime/1000) * percentOfTime );
-                    
-                //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
-                loopSchedule.push({
-                    instmodel   : TN_sndbank.models[ soundIndex ],
-                    time        : startEventTime
-                });
-            });
-            
-            TNSQ.playSchedule( loopSchedule );
-
-            
-            //LOOPING
-//            setTimeout(function(){
-//                TNSQ.playSchedule( loopSchedule );
-//            },TNSQ.totalTime);
-//            setTimeout(function(){
-//                TNSQ.playSchedule( loopSchedule );
-//            },TNSQ.totalTime*2);
-
-        }
     }
     
     window.TNSQ = TNSQ.start();
     window.TN_sndbank = instrumentCollection;
+    window.TN_tapereel = tapeReelView;
+    window.TN_controls = controlPanel;
     
 });

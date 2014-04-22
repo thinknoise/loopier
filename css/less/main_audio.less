@@ -55,6 +55,9 @@ ul {
         padding-top     : 10px;
         color           : @colorEB;
     }
+    .tn-name {
+        font-weight : 800;
+    }
     #tn-samples-container {
         .sound-bank-wrap {
             margin      : 5px 4px;
@@ -69,18 +72,20 @@ ul {
         width      : 100px;
         line-height: 20px;
         margin     : 2px;
-
+        border     : 1px solid @color21;
         &.ui-draggable-dragging {
             opacity     : 0.8; 
         }
     }
     #track-container{
-        width           : 100%;
+        width           : auto;
+        margin          : 0px 30px;
         padding         : 10px;
-        color           : @colorEB; 
+        color           : @colorEB;
 
         .sound-clone {
-            opacity         : 0.5; 
+            opacity    : 0.7; 
+            border     : 0px;
         }
 
         .track-gradiant-off( @start-color : @color45, @end-color : @color8) {
@@ -98,13 +103,12 @@ ul {
             border          : 1px solid @color45;
             .track-gradiant-off( @color7, @color8 );
 
-           &.track-hover {
+            &.track-hover {
                 .track-gradiant-off( @color8, @colorA1 );
-                border          : 1px solid @colorEB;
+                border      : 1px solid @colorEB;
+                // need slight drop shadow
             }
-        }
-        .mixing-track {
-
+            
             &.empty {
                 background-color: @colorDE;
             }
@@ -120,15 +124,16 @@ ul {
     #tn-controls-container {
 
         .control-block {
-            align           : center;
-            color           : @colorDE;
+            text-align          : center;
+            color               : @colorDE;
 
             .player-controls {
                 display         : inline-block;
                 margin          : 10px;
-                 font-size       : 20px;
-                 font-size       : 2.0rem;
-
+                padding         : 0px 10px;
+                font-size       : 20px;
+                font-size       : 2.0rem;
+                width           : 80px;
             }
 
             .settings {}
@@ -189,6 +194,17 @@ ul {
             width          : 140px;
             margin         : 5px 10px;
         }
+        #tn-controls-container {
+            .control-block {
+                .player-controls {
+                    margin          : 10px;
+                    padding         : 0px 30px;
+                    font-size       : 30px;
+                    font-size       : 3.0rem;
+
+                }
+            }
+        }
     }
 }
 
@@ -206,6 +222,17 @@ ul {
         }
     }
     #tn-page-container{
+    #tn-controls-container {
+        .control-block {
+            .player-controls {
+                margin          : 10px;
+                padding         : 0px 40px;
+                font-size       : 40px;
+                font-size       : 4.0rem;
+
+            }
+        }
+    }
     }
 
 }

@@ -34,6 +34,9 @@ ul {
   padding-top: 10px;
   color: #ebebeb;
 }
+#tn-page-container .tn-name {
+  font-weight: 800;
+}
 #tn-page-container #tn-samples-container .sound-bank-wrap {
   margin: 5px 4px;
   text-align: center;
@@ -46,18 +49,21 @@ ul {
   width: 100px;
   line-height: 20px;
   margin: 2px;
+  border: 1px solid #212121;
 }
 #tn-page-container .sound-clone.ui-draggable-dragging,
 #tn-page-container .audio-button.ui-draggable-dragging {
   opacity: 0.8;
 }
 #tn-page-container #track-container {
-  width: 100%;
+  width: auto;
+  margin: 0px 30px;
   padding: 10px;
   color: #ebebeb;
 }
 #tn-page-container #track-container .sound-clone {
-  opacity: 0.5;
+  opacity: 0.7;
+  border: 0px;
 }
 #tn-page-container #track-container .mixing-track {
   height: 35px;
@@ -87,14 +93,16 @@ ul {
   margin-left: 0px;
 }
 #tn-page-container #tn-controls-container .control-block {
-  align: center;
+  text-align: center;
   color: #dedede;
 }
 #tn-page-container #tn-controls-container .control-block .player-controls {
   display: inline-block;
   margin: 10px;
+  padding: 0px 10px;
   font-size: 20px;
   font-size: 2.0rem;
+  width: 80px;
 }
 .container-fluid {
   padding: 0px;
@@ -137,6 +145,12 @@ ul {
     width: 140px;
     margin: 5px 10px;
   }
+  #tn-page-container #tn-controls-container .control-block .player-controls {
+    margin: 10px;
+    padding: 0px 30px;
+    font-size: 30px;
+    font-size: 3.0rem;
+  }
 }
 @media (min-width: 1024px) {
   body {
@@ -149,5 +163,11 @@ ul {
   #tn-samples-container .sound-item {
     padding-left: 0px;
     padding-right: 0px;
+  }
+  #tn-page-container #tn-controls-container .control-block .player-controls {
+    margin: 10px;
+    padding: 0px 40px;
+    font-size: 40px;
+    font-size: 4.0rem;
   }
 }

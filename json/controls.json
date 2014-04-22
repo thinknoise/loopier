@@ -1,22 +1,31 @@
 [
     {
-        "type"  : "stop-btn",
-        "contolClass" : "control-stop",
-        "buttonIcon"  : "fa fa-stop"
+        "type"          : "play-btn",
+        "altText"       : "play",
+        "contolClass"   : "control-play",
+        "buttonIcon"    : "fa fa-play-circle-o",
+        "toggleClass"   : "control-stop",
+        "toggleIcon"    : "fa fa-times-circle-o"
     },
     {
-        "type"  : "play-btn",
-        "contolClass" : "control-play",
-        "buttonIcon"  : "fa fa-play"
+        "type"          : "check-box",
+        "altText"       : "loop",
+        "contolClass"   : "control-loop",
+        "buttonIcon"    : "fa fa-refresh",
+        "toggleClass"   : "control-loop",
+        "toggleIcon"    : "fa fa-check",
+        "state"           : "default"
     },
     {
-        "type"  : "check-box",
-        "contolClass" : "control-play",
-        "buttonIcon"  : "fa fa-check"
+        "type"          : "share-btn",
+        "altText"       : "share",
+        "contolClass"   : "control-share",
+        "buttonIcon"    : "fa fa-share"
     },
     {
-        "type"  : "mail-btn",
-        "contolClass" : "control-share",
-        "buttonIcon"  : "fa fa-mail"
+        "type"          : "reset-btn",
+        "altText"       : "reset loop",
+        "contolClass"   : "control-reset",
+        "buttonIcon"    : "fa fa-eject"
     }
 ]
