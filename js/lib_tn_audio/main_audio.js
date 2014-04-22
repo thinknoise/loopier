@@ -46,7 +46,7 @@ require([
     //Individual Control Panel knob
     var KnobModel = Backbone.Model.extend({
         defaults  : {
-            type    : 'default',
+            type          : 'default',
             contolClass   : 'control',
             buttonIcon    : 'fa fa-default'
         },
@@ -54,10 +54,6 @@ require([
             //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
             //_.bindAll(this, 'setTotalTime');
         },
-        playSequence : function () {},
-        pauseSequence : function () {},
-        stopSequence : function () {},
-        setTotalTime : function () {},
     });
     
     //Individual Sample
@@ -165,14 +161,13 @@ require([
         
             // if loop buttton state is on set loopState to true
             if (playButtonState === 'default' || playButtonState === 'looping') {
+                //button state
                 this.collection.models[1].set("state", 'looping' )
+                // dictates the track state on play seq
                 TN_tapereel.loopState = true;
             }
-            $(event.target)
-                    .removeClass( defaultIcon )
-                    .removeClass( controlClass )
-                    .addClass( toggleIcon )
-                    .addClass( toggleClass );
+            $(event.target).removeClass( defaultIcon +' '+ controlClass )
+                              .addClass( toggleIcon +' '+ toggleClass );
             
             TN_tapereel.startSequence();
         },
@@ -186,51 +181,42 @@ require([
                 playButtonState = this.collection.models[1].get("state");
         
             if ( playButtonState === 'looping' ) {
+                // button state
                 this.collection.models[1].set("state", 'oneshot' )
+                // track state
                 TN_tapereel.loopState = false;
-                $(event.target)
-                       .removeClass( defaultIcon )
-                       .removeClass( controlClass )
-                       .removeClass( 'danger') 
-                       .addClass( toggleClass )
-                       .addClass( toggleIcon );
-            } else {
-                this.collection.models[1].set("state", 'looping' );
-                TN_tapereel.loopState = true;
-                //this.onStopSequence();
                 // flip play button to play state
-                
-                $(event.target)
-                       .removeClass( toggleIcon )
-                       .removeClass( toggleClass )
-                       .removeClass( 'danger') 
-                       .addClass( defaultIcon )
-                       .addClass( controlClass );
+                this.onLastCall();
+                $(event.target).removeClass( defaultIcon +' '+ controlClass )
+                                  .addClass( toggleIcon +' '+ toggleClass );
+            } else {
+                // button state
+                this.collection.models[1].set("state", 'looping' );
+                // track state
+                TN_tapereel.loopState = true;
+                $(event.target).removeClass( toggleIcon +' '+ toggleClass )
+                                  .addClass( defaultIcon +' '+ controlClass );
             }
-            console.log( 'loopState: ' + this.collection.models[1].get("state") )
         },
                 // not there yet
         onLastCall : function ( event ) {
-            $(event.target).find('span').addClass( 'danger' ).removeClass( this.collection.models[0].get("toggleClass") );
+            $(this.el).find('.control-stop').addClass('danger') ;
             TN_tapereel.loopState = false;
-            this.setPlayButtonToPlay( event )
+            //this.setPlayButtonToPlay( event )
         },
-        setPlayButtonToPlay : function ( event ) {
+        setPlayButtonToPlay : function () {
             var index = 0,
                 controlClass = this.collection.models[index].get("contolClass"),
                 defaultIcon  = this.collection.models[index].get("buttonIcon"),
                 toggleIcon   = this.collection.models[index].get("toggleIcon"),
                 toggleClass  = this.collection.models[index].get("toggleClass");
         
-            $(this.el).find('.control-stop')
-                    .removeClass( toggleClass )
-                    .removeClass( toggleIcon )
-                    .removeClass( 'danger') 
-                    .addClass( defaultIcon )
-                    .addClass( controlClass );
+            $(this.el).find('.control-stop').removeClass( toggleClass + ' danger ' + toggleIcon )
+                                               .addClass( defaultIcon +' '+ controlClass );
         },
         onResetTracks : function ( ) {
             TN_tapereel.onClearTapeReel();
+            this.onLastCall();
         }
     });
 
@@ -276,21 +262,38 @@ require([
             $this.removeClass('track-hover')
                  .removeClass( "empty" )
             
-            var $uiHelper = $(ui.helper);
+            $(ui.draggable).addClass('tracked');
             
-            $uiHelper.find('.sound-name').remove();
-            $uiHelper.clone(true)
-                     .addClass('sound-clone ' + $uiHelper.data('icon') ) //
-                     .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
-                     .css({ "padding-left" : "3px", "text-align": "left" })
-                     .appendTo( $this )
-                     .draggable({
-                        snap     : '.mixing-track',
-                        snapMode : 'inner',
-                        drop     : DragAndDrop.soundDropped,
-                        stop     : DragAndDrop.soundStopped,
-                     })
-                     .on( 'click', TNSQ.fireOffSound );
+            var $uiHelper = $(ui.helper);
+
+            if( !$uiHelper.hasClass('sound-clone') ) {
+                $uiHelper.find('.sound-name').remove();
+                $uiHelper.clone(true)
+                         .addClass('sound-clone ' + $uiHelper.data('icon') ) //
+                         .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
+                         .css({ "padding-left" : "3px", "text-align": "left" })
+                         .appendTo( $this )
+                         .draggable({
+                            snap     : '.mixing-track',
+                            snapMode : 'inner',
+                            drop     : this.soundDropped,
+                            stop     : this.soundStopped,
+                         })
+                         .on( 'click', TNSQ.fireOffSound );
+
+            }
+        },
+        soundDropped : function ( event, ui ) {
+            //console.log( 'soundDropped', ui );
+               
+        },
+        soundStopped : function ( event, ui ) {
+            //onsole.log( 'soundStopped', ui );
+            if( $(this).hasClass('tracked') ) {
+                $(this).removeClass('tracked');
+            } else {
+                $(this).remove();
+            }
         }
     });
     
@@ -472,28 +475,33 @@ require([
                 leftOffset   = this.$el.offset().left,
                 timeLength   = this.totalTime,
                 loopSchedule = [];
+            console.log($clones.length);
+            if($clones.length) {
+                $clones.each( function () {
 
-            $clones.each( function () {
+                    var $clone         = $(this),
+                        soundIndex     = $clone.data('sound-index'),
+                        left           = parseInt( $clone.css('left') ) - leftOffset,
+                        percentOfTime  = left/trackLength,
+                        startEventTime = ( (timeLength/1000) * percentOfTime );
 
-                var $clone         = $(this),
-                    soundIndex     = $clone.data('sound-index'),
-                    left           = parseInt( $clone.css('left') ) - leftOffset,
-                    percentOfTime  = left/trackLength,
-                    startEventTime = ( (timeLength/1000) * percentOfTime );
-                    
-                //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
-                loopSchedule.push({
-                    instmodel   : TN_sndbank.models[ soundIndex ],
-                    time        : startEventTime
+                    //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
+                    loopSchedule.push({
+                        instmodel   : TN_sndbank.models[ soundIndex ],
+                        time        : startEventTime
+                    });
                 });
-            });
-            
-            this.playSchedule( loopSchedule );
-            //LOOPING
-//            setTimeout(function(){
-//                TNSQ.playSchedule( loopSchedule );
-//            },TNSQ.totalTime);
 
+                this.playSchedule( loopSchedule );
+                //LOOPING
+    //            setTimeout(function(){
+    //                TNSQ.playSchedule( loopSchedule );
+    //            },TNSQ.totalTime);
+            } else {
+                //nothing on the track
+                console.log('nothing on the track');
+                
+            }
         },
         playSchedule : function ( seqSchedule ) {
 
@@ -561,6 +569,31 @@ require([
     var instrumentCollection = new InstrumentCollection();
     var soundBank = new SoundBank({ collection: instrumentCollection });
     soundBank.load();
+
+//////////////////////////////////
+    // begin router
+    // define router class 
+    
+    var GalleryRouter = Backbone.Router.extend ({ 
+        routes: { 
+            '' : 'home', 
+            'view': 'viewImage' 
+        }, 
+        home: function () { 
+            alert('you are viewing home page'); 
+        }, 
+        viewImage: function () { 
+            alert('you are viewing an image'); 
+        } 
+    }); 
+    
+    //define our new instance of router 
+    var appRouter = new GalleryRouter(); 
+    // use html5 History API 
+    Backbone.history.start({pushState: true}); 
+
+    // end router
+//////////////////////////////////
 
     
     var TNSQ = {

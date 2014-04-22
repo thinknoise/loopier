@@ -104,6 +104,9 @@ ul {
   font-size: 2.0rem;
   width: 80px;
 }
+#tn-page-container #tn-controls-container .control-block .player-controls .danger {
+  color: red;
+}
 .container-fluid {
   padding: 0px;
 }
