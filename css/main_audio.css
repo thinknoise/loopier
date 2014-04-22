@@ -15,8 +15,8 @@ body {
   background-color: #181818;
 }
 h1 {
-  font-size: 18px;
-  font-size: 1.8rem;
+  font-size: 33px;
+  font-size: 3.3rem;
 }
 ul {
   list-style: none;
@@ -100,9 +100,9 @@ ul {
   display: inline-block;
   margin: 10px;
   padding: 0px 10px;
-  font-size: 20px;
-  font-size: 2.0rem;
-  width: 80px;
+  font-size: 40px;
+  font-size: 4.0rem;
+  width: 60px;
 }
 #tn-page-container #tn-controls-container .control-block .player-controls .danger {
   color: red;
@@ -115,8 +115,8 @@ ul {
     background-color: #212121;
   }
   h1 {
-    font-size: 24px;
-    font-size: 2.4rem;
+    font-size: 38px;
+    font-size: 3.8rem;
   }
   .container-fluid {
     padding: 10px 15px;
@@ -130,14 +130,19 @@ ul {
     width: 120px;
     margin: 5px;
   }
+  #tn-page-container #tn-controls-container .control-block .player-controls {
+    margin: 10px;
+    padding: 0px 20px;
+    width: 100px;
+  }
 }
 @media (min-width: 768px) {
   body {
     background-color: #454545;
   }
   h1 {
-    font-size: 32px;
-    font-size: 3.2rem;
+    font-size: 44px;
+    font-size: 4.4rem;
   }
   #tn-samples-container .sound-item {
     padding-left: 17px;
@@ -151,8 +156,7 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 30px;
-    font-size: 30px;
-    font-size: 3.0rem;
+    width: 120px;
   }
 }
 @media (min-width: 1024px) {
@@ -160,8 +164,8 @@ ul {
     background-color: #555555;
   }
   h1 {
-    font-size: 48px;
-    font-size: 4.8rem;
+    font-size: 52px;
+    font-size: 5.2rem;
   }
   #tn-samples-container .sound-item {
     padding-left: 0px;
@@ -170,7 +174,6 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 40px;
-    font-size: 40px;
-    font-size: 4.0rem;
+    width: 180px;
   }
 }
