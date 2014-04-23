@@ -82,5 +82,68 @@
         "name"      : "Tamborine",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-screenshot"
+    },
+    {
+        "snd_id"    : 12,
+        "url"       : "audio/percussion/doumbek-thumbslap.wav",
+        "name"      : "Doumbek1",
+        "icon"      : "icon-grater",
+        "glyphicon" : "glyphicon glyphicon-certificate"
+    },
+    {
+        "snd_id"    : 13,
+        "url"       : "audio/percussion/doumbek-hand.wav",
+        "name"      : "Doumbek2",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
+    },
+    {
+        "snd_id"    : 14,
+        "url"       : "audio/Drums/acoustic_kit/hat-closed.wav",
+        "name"      : "Hat Closed",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-screenshot"
+    },
+    {
+        "snd_id"    : 15,
+        "url"       : "audio/Drums/acoustic_kit/hat-open.wav",
+        "name"      : "Hat Open",
+        "icon"      : "icon-grater",
+        "glyphicon" : "glyphicon glyphicon-certificate"
+    },
+    {
+        "snd_id"    : 16,
+        "url"       : "audio/Drums/acoustic_kit/snare-1.wav",
+        "name"      : "Snare1",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
+    },
+    {
+        "snd_id"    : 17,
+        "url"       : "audio/Drums/acoustic_kit/snare-2.wav",
+        "name"      : "Snare2",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-screenshot"
+    },
+    {
+        "snd_id"    : 18,
+        "url"       : "audio/Drums/analog_kit/ana-clap.wav",
+        "name"      : "clap",
+        "icon"      : "icon-grater",
+        "glyphicon" : "glyphicon glyphicon-certificate"
+    },
+    {
+        "snd_id"    : 19,
+        "url"       : "audio/Drums/analog_kit/dxKik01_loud.wav",
+        "name"      : "Kick Loud",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
+    },
+    {
+        "snd_id"    : 20,
+        "url"       : "audio/Drums/analog_kit/ana-snare-4.wav",
+        "name"      : "Snare3",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-screenshot"
     }
 ]

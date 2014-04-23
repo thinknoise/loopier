@@ -6,14 +6,17 @@
 */
 
 @color18    : #181818;
+@color21_5  : rgba(21,21,21,0.3);
 @color21    : #212121;
 @color45    : #454545;
 @color5     : #555;
 @color7     : #777;
 @color8     : #888;
 @colorA1    : #a1a1a1;
+@colorBA    : #bababa;
 @colorDE    : #dedede;
 @colorEB    : #ebebeb;
+@colorF     : #ffffff;
 
 // Mobile first
 @screen-tiny-min : 340px; //just max with
@@ -43,10 +46,43 @@ ul {
     padding-left    : 0px;
 } 
 
-#tn-page-container{
-    margin-left:auto;
-    margin-right:auto;
 
+
+.arrow_box {
+	position    : relative;
+	background  : @colorDE;
+	border      : 1px solid @colorF;
+}
+.arrow_box          :after, .arrow_box:before {
+	top         : 100%;
+	left        : 50%;
+	border      : solid transparent;
+	content     : " ";
+	height      : 0;
+	width       : 0;
+	position    : absolute;
+	pointer-events: none;
+}
+
+.arrow_box:after {
+	border-color    : rgba(213, 213, 213, 0);
+	border-top-color: Z;
+	border-width    : 10px;
+	margin-left     : -10px;
+}
+.arrow_box:before {
+	border-color    : rgba(255, 255, 255, 0);
+	border-top-color: @colorDE;
+	border-width    : 11px;
+	margin-left     : -11px;
+}
+
+
+#tn-page-container{
+    margin-left     :auto;
+    margin-right    :auto;
+
+    // not tooo big -limit
     max-width : @screen-lg-min;
 
     .page-title {
@@ -69,58 +105,89 @@ ul {
     }
     .sound-clone,
     .audio-button {
-        width      : 100px;
+        position   : relative;
+        width      : 104px;
         line-height: 20px;
-        margin     : 2px;
+        margin     : 0px;
         border     : 1px solid @color21;
         &.ui-draggable-dragging {
             opacity     : 0.8; 
+            box-shadow      : 2px 5px 8px @color21_5;
+        }
+
+        .clue-popup {
+            display         : none;
+            position        : absolute;
+            top             : -35px;
+            background-color: @colorDE;
+            border          : 1px solid @colorF;
+            border-radius   : 5px;
+            font-size       : 10px;
+            font-size       : 1.0rem;
+            padding         : 3px 8px;
+            color           : @color8;
         }
     }
-    #track-container{
-        width           : auto;
-        margin          : 0px 30px;
-        padding         : 10px;
-        color           : @colorEB;
-
-        .sound-clone {
-            opacity    : 0.7; 
-            border     : 0px;
+    #tn-tape-reel {
+        position            : relative;
+        .clue-popup {
+            position        : absolute;
+            background-color: @colorDE;
+            font-size       : 10px;
+            font-size       : 1.0rem;
+            padding         : 3px 8px;
+            color           : @color8;
+            border          : 1px solid @colorF;
+            border-radius   : 5px;
+            box-shadow      : 0 0 30px black;
         }
+        #track-container{
+            width           : auto;
+            margin          : 0px 30px;
+            padding         : 10px;
+            color           : @colorEB;
 
-        .track-gradiant-off( @start-color : @color45, @end-color : @color8) {
-            background      : -webkit-linear-gradient( @start-color, @end-color );
-            background      :      -o-linear-gradient( @start-color, @end-color );
-            background      :    -moz-linear-gradient( @start-color, @end-color );
-            background      :         linear-gradient( @start-color, @end-color ); 
-         }
-
-        .mixing-track {
-            height          : 35px;
-            width           : 100%;
-            margin-bottom   : 10px;
-            padding         : 0px;
-            border          : 1px solid @color45;
-            .track-gradiant-off( @color7, @color8 );
-
-            &.track-hover {
-                .track-gradiant-off( @color8, @colorA1 );
-                border      : 1px solid @colorEB;
-                // need slight drop shadow
+            .sound-clone {
+                opacity    : 0.7; 
+                border     : 0px;
             }
-            
-            &.empty {
-                background-color: @colorDE;
-            }
-            .indicator {
-                height          : 100%;
-                width           : 0px;
-                border-right    : 1px solid #FFF;
-                margin-left     : 0px;
+
+            .track-gradiant-off( @start-color : @color45, @end-color : @color8) {
+                background      : -webkit-linear-gradient( @start-color, @end-color );
+                background      :      -o-linear-gradient( @start-color, @end-color );
+                background      :    -moz-linear-gradient( @start-color, @end-color );
+                background      :         linear-gradient( @start-color, @end-color ); 
+             }
+
+            .mixing-track {
+                position        : relative;
+                height          : 35px;
+                width           : 100%;
+                margin-bottom   : 10px;
+                padding         : 0px;
+                border          : 1px solid @colorBA;
+                box-shadow      : 0 0 10px @color21_5;
+                .track-gradiant-off( @color7, @color8 );
+
+                &.track-hover {
+                    .track-gradiant-off( @color8, @colorA1 );
+                    border      : 1px solid @colorEB;
+                    box-shadow      : 0 0 15px black;
+                    // need slight drop shadow
+                }
+
+                &.empty {
+                    background-color: @colorDE;
+                }
+                .indicator {
+                    height          : 100%;
+                    width           : 0px;
+                    border-right    : 1px solid #FFF;
+                    margin-left     : 0px;
+                }
             }
         }
     }
-
     #tn-controls-container {
 
         .control-block {
@@ -171,7 +238,6 @@ ul {
         }
     }
     #tn-page-container{
-        .sound-clone,
         .audio-button {
             width          : 120px;
             margin         : 5px;
@@ -202,7 +268,6 @@ ul {
         } 
     }
     #tn-page-container{
-        .sound-clone,
         .audio-button {
             width          : 140px;
             margin         : 5px 10px;

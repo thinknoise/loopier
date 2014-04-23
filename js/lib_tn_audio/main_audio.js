@@ -1,6 +1,5 @@
 require.config({
     paths: {
-        'draganddrop'   : './drag_and_drop',
         'underscore'    : '../lib/underscore',
         'backbone'      : '../lib/backbone',
         'jQuery'        : '../lib/jquery',
@@ -27,7 +26,6 @@ require.config({
     }
 });
 require([
-    'draganddrop',
     'backbone',
     'underscore',
     'jQuery',
@@ -36,7 +34,6 @@ require([
     
 ], function (
     
-    DragAndDrop,
     Backbone,
     _,
     $
@@ -166,10 +163,14 @@ require([
                 // dictates the track state on play seq
                 TN_tapereel.loopState = true;
             }
-            $(event.target).removeClass( defaultIcon +' '+ controlClass )
-                              .addClass( toggleIcon +' '+ toggleClass );
+            var isStarted = TN_tapereel.startTapeLoop();
             
-            TN_tapereel.startSequence();
+            if( isStarted ) {
+                $(event.target).removeClass( defaultIcon +' '+ controlClass )
+                                  .addClass( toggleIcon +' '+ toggleClass );
+            }
+            
+
         },
         onChangeLoopState : function ( event ) {
             //console.log(this.collection.models[1].get("contolClass"), $(event.target) )
@@ -222,18 +223,17 @@ require([
 
     var ChannelView = Backbone.View.extend({
         tagName    : 'li',
-        className  : 'mixing-track empty',
+        className  : 'mixing-track',
         template   : null,
         events     : {},
         initialize : function(){
             _.bindAll(this, 'render', 'playSequence', 'onDropped' );
-            
-           $(this.el).droppable({
-               over     : this.onOvered,
-               out      : this.onOuted,
-               drop     : this.onDropped
-           });
 
+            $(this.el).droppable({
+                over     : this.onOvered,
+                out      : this.onOuted,
+                drop     : this.onDropped
+            });
 
             this.template = _.template(
                 "<div class='indicator'></div>"
@@ -260,7 +260,6 @@ require([
             var $this = $(this.el);
                 
             $this.removeClass('track-hover')
-                 .removeClass( "empty" )
             
             $(ui.draggable).addClass('tracked');
             
@@ -268,28 +267,37 @@ require([
 
             if( !$uiHelper.hasClass('sound-clone') ) {
                 $uiHelper.find('.sound-name').remove();
-                $uiHelper.clone(true)
-                         .addClass('sound-clone ' + $uiHelper.data('icon') ) //
+                var $cloneParent = $('.mixing-track'),
+                    $clone = $uiHelper.clone(true)
+                         .addClass('sound-clone ' + $uiHelper.data('icon') ) 
                          .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
                          .css({ "padding-left" : "3px", "text-align": "left" })
                          .appendTo( $this )
                          .draggable({
                             snap     : '.mixing-track',
                             snapMode : 'inner',
-                            drop     : this.soundDropped,
-                            stop     : this.soundStopped,
+                            drag     : this.cloneDragged,
+                            drop     : this.cloneDropped,
+                            stop     : this.cloneStopped,
                          })
                          .on( 'click', TNSQ.fireOffSound );
-
+                 
+                var leftAdjust = $clone.position().left - $cloneParent.offset().left + 10;
+                var topAdjust = 0;
+                $clone.css({left: leftAdjust, top: "0px" });
             }
         },
-        soundDropped : function ( event, ui ) {
-            //console.log( 'soundDropped', ui );
-               
+        cloneDragged : function ( event, ui ) {
+            //console.log( 'cloneStarted', ui );
         },
-        soundStopped : function ( event, ui ) {
-            //onsole.log( 'soundStopped', ui );
+        cloneDropped : function ( event, ui ) {
+            console.log( 'cloneDropped', ui );
+        },
+        cloneStopped : function ( event, ui ) {
+            //onsole.log( 'cloneStopped', ui );
             if( $(this).hasClass('tracked') ) {
+                //this isn't pretty -
+                $(this).css({ top:'0px' })
                 $(this).removeClass('tracked');
             } else {
                 $(this).remove();
@@ -316,6 +324,7 @@ require([
             //later we will see complex template engines, but is the basic from underscore
             this.template = _.template(
                 "<div class='btn btn-primary audio-player audio-button draggable' data-sound-index='<%= snd_id %>' data-icon='<%= glyphicon %>' data-sound-name='<%= name %>'>" +
+                    //"<div class='clue-popup arrow_box'>drag me onto a track</div>" +
                     "<div class='sound-name'><%= name %></div>" +
                 "</div>"                
             );
@@ -329,13 +338,20 @@ require([
                 snap     : '.mixing-track',
                 snapMode : 'inner',
 
-                //create   : DragAndDrop.create,
                 start    : this.onStarting, //that.model.onStart,
                 drag     : this.onDragging,
             });
         },
         onClick : function () {
             this.model.playSound();
+        },
+        popupOn : function () {
+            // TODO: this needs different triggers
+            // needs to be tied to model - random child of the collection?
+            //$(this.el).find(".clue-popup").css({display:"block"});
+        },
+        popupOff : function () {
+            //$(this.el).find(".clue-popup").css({display:"none"});
         },
         onStarting : function ( event, ui ) {
             $(ui.helper).css({ 'width': this.model.get('width') });
@@ -443,8 +459,9 @@ require([
         loopState  : true,
         events : {},
         initialize : function(){
-            _.bindAll(this, 'addItemHandler', 'loadCompleteHandler', 'startSequence', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
+            _.bindAll(this, 'addItemHandler', 'loadCompleteHandler', 'rescaleLoopClones', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
+            $(window).on( 'resize', this.rescaleLoopClones )
         },
         load : function(){
             // AJAX Request
@@ -459,23 +476,40 @@ require([
             //model is an instance of ChannelView -tracks
             var channelView = new ChannelView({ model:model });
             channelView.render();
+
             $(this.el).append(channelView.el);
         },
 
         loadCompleteHandler : function(){
-            console.log('loaded channels without errors!');
+            //console.log('loaded channels without errors!');
             this.render();
         },
         errorHandler : function(){ throw "Error loading JSON file"; },
-        startSequence : function ( e ) {
+        rescaleLoopClones : function ( ) {
+            var $track       = this.$el.find('.mixing-track'),
+                $clones      = this.$el.find('.sound-clone'),
+                trackWidth   = $track.width(),
+                startWidth   = this.trackWidth;
+        
+            if($clones.length) {
+                $clones.each( function () {
+                    var newLeft = (parseInt($(this).css('left'))*(trackWidth/startWidth));
+                    $(this).css({ left: newLeft + 'px' });
+                });
+            }
+            
+            this.trackWidth = trackWidth;
+            
+        },
+        startTapeLoop : function ( e ) {
 
             var $track       = this.$el.find('.mixing-track'),
                 $clones      = this.$el.find('.sound-clone'),
-                trackLength  = parseInt( $track.width() ),
-                leftOffset   = this.$el.offset().left,
+                trackLength  = this.trackWidth,
+                leftOffset   = this.$el.offset().left - 30,
                 timeLength   = this.totalTime,
                 loopSchedule = [];
-            console.log($clones.length);
+
             if($clones.length) {
                 $clones.each( function () {
 
@@ -497,10 +531,12 @@ require([
     //            setTimeout(function(){
     //                TNSQ.playSchedule( loopSchedule );
     //            },TNSQ.totalTime);
+                return true;
             } else {
                 //nothing on the track
                 console.log('nothing on the track');
-                
+                this.stopSequence();
+                return false;
             }
         },
         playSchedule : function ( seqSchedule ) {
@@ -519,9 +555,9 @@ require([
                 this.totalTime, 
                 "linear",
                 function () {
-                    console.log(self.loopState);
+                    //console.log(self.loopState);
                     if(self.loopState) {
-                        self.startSequence();
+                        self.startTapeLoop();
                     } else {
                         self.stopSequence();
                     }
@@ -537,17 +573,17 @@ require([
         onClearTapeReel : function () {
             var $tracks = $(this.el).find('.mixing-track');
             _.each($tracks, function ( track, index ) {
-                if( !$(track).hasClass('empty') ) {
-                    var clones = $(track).find('.sound-clone');
-                    _.each( clones, function(clone) {
-                        $(clone).remove()
-                    })
-                }
+                var clones = $(track).find('.sound-clone');
+                _.each( clones, function(clone) {
+                    $(clone).remove()
+                })
             });
         },
         render : function(){
             //we assign our element into the available dom element
+            $('#tn-tape-reel').append("<div class='clue-popup arrow_box  hidden  '>drag a sound onto a track</div>");
             $('#tn-tape-reel').append($(this.el));
+            this.trackWidth = $(this.el).width();
 
             return this;
         },
@@ -574,21 +610,27 @@ require([
     // begin router
     // define router class 
     
-    var GalleryRouter = Backbone.Router.extend ({ 
+    var LoopRouter = Backbone.Router.extend ({ 
         routes: { 
             '' : 'home', 
-            'view': 'viewImage' 
+            'random': 'setRandom' 
         }, 
-        home: function () { 
-            alert('you are viewing home page'); 
-        }, 
-        viewImage: function () { 
-            alert('you are viewing an image'); 
-        } 
     }); 
     
-    //define our new instance of router 
-    var appRouter = new GalleryRouter(); 
+// define new router instance
+	var appRouter = new LoopRouter();
+
+// using router.on()
+	appRouter.on('route:home', function() {
+		//code here
+                alert('home');
+	});
+
+	appRouter.on('route:setRandom', function() {
+		//code here
+                alert('setRandom');
+	});
+    
     // use html5 History API 
     Backbone.history.start({pushState: true}); 
 
