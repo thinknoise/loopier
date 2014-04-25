@@ -76,6 +76,17 @@ ul {
 	border-width    : 11px;
 	margin-left     : -11px;
 }
+.clue-popup {
+    position        : absolute;
+    background-color: @colorDE;
+    font-size       : 10px;
+    font-size       : 1.0rem;
+    padding         : 3px 8px;
+    color           : @color8;
+    border          : 1px solid @colorF;
+    border-radius   : 5px;
+    box-shadow      : 0 0 30px black;
+}
 
 
 #tn-page-container{
@@ -115,41 +126,17 @@ ul {
             box-shadow      : 2px 5px 8px @color21_5;
         }
 
-        .clue-popup {
-            display         : none;
-            position        : absolute;
-            top             : -35px;
-            background-color: @colorDE;
-            border          : 1px solid @colorF;
-            border-radius   : 5px;
-            font-size       : 10px;
-            font-size       : 1.0rem;
-            padding         : 3px 8px;
-            color           : @color8;
-        }
     }
     #tn-tape-reel {
         position            : relative;
-        .clue-popup {
-            position        : absolute;
-            background-color: @colorDE;
-            font-size       : 10px;
-            font-size       : 1.0rem;
-            padding         : 3px 8px;
-            color           : @color8;
-            border          : 1px solid @colorF;
-            border-radius   : 5px;
-            box-shadow      : 0 0 30px black;
-        }
         #track-container{
             width           : auto;
-            margin          : 0px 30px;
-            padding         : 10px;
+            margin          : 0px 10px;
+            padding         : 0px;
             color           : @colorEB;
 
             .sound-clone {
                 opacity    : 0.7; 
-                border     : 0px;
             }
 
             .track-gradiant-off( @start-color : @color45, @end-color : @color8) {
@@ -166,7 +153,7 @@ ul {
                 margin-bottom   : 10px;
                 padding         : 0px;
                 border          : 1px solid @colorBA;
-                box-shadow      : 0 0 10px @color21_5;
+                //box-shadow      : 0 0 10px @color21_5;
                 .track-gradiant-off( @color7, @color8 );
 
                 &.track-hover {

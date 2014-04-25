@@ -221,13 +221,16 @@ require([
         }
     });
 
+////////////////////////////////////////////
+//  CHANNEL VIEW - TRACKS
+////////////////////////////////////////////
     var ChannelView = Backbone.View.extend({
         tagName    : 'li',
         className  : 'mixing-track',
         template   : null,
         events     : {},
         initialize : function(){
-            _.bindAll(this, 'render', 'playSequence', 'onDropped' );
+            _.bindAll(this, 'render', 'playSequence', 'onDropped', 'makeClone' );
 
             $(this.el).droppable({
                 over     : this.onOvered,
@@ -266,6 +269,7 @@ require([
             var $uiHelper = $(ui.helper);
 
             if( !$uiHelper.hasClass('sound-clone') ) {
+                // remove the title for icone replacement
                 $uiHelper.find('.sound-name').remove();
                 var $cloneParent = $('.mixing-track'),
                     $clone = $uiHelper.clone(true)
@@ -280,18 +284,21 @@ require([
                             drop     : this.cloneDropped,
                             stop     : this.cloneStopped,
                          })
-                         .on( 'click', TNSQ.fireOffSound );
+                         .on( 'click', function (e) { TN_sndbank.models[$uiHelper.data('sound-index')].playSound() } );
                  
                 var leftAdjust = $clone.position().left - $cloneParent.offset().left + 10;
                 var topAdjust = 0;
                 $clone.css({left: leftAdjust, top: "0px" });
             }
         },
+        makeClone : function () {
+            console.log("makeClone");
+        },
         cloneDragged : function ( event, ui ) {
             //console.log( 'cloneStarted', ui );
         },
         cloneDropped : function ( event, ui ) {
-            console.log( 'cloneDropped', ui );
+            //console.log( 'cloneDropped', ui );
         },
         cloneStopped : function ( event, ui ) {
             //onsole.log( 'cloneStopped', ui );
@@ -304,7 +311,6 @@ require([
             }
         }
     });
-    
     // called with its Own Model
     var InstrumentView = Backbone.View.extend({
         tagName    : 'li',
@@ -374,7 +380,9 @@ require([
         model: ChannelModel,
         url: 'json/channel.json'
     });
-
+    
+    
+///////////////
     var SoundBank = Backbone.View.extend({
         id         : "samples-table",
         tagName    : "ul", 
@@ -408,7 +416,6 @@ require([
         loadCompleteHandler : function(){
             console.log('loaded SoundBank without errors!');
             this.render();
-
         },
 
         errorHandler : function(){
@@ -451,17 +458,68 @@ require([
             console.log( error );
         },
     });
+
+    // create the instance of soundBank collection:
+    var instrumentCollection = new InstrumentCollection();
+    var soundBank = new SoundBank({ collection: instrumentCollection });
+    soundBank.load();
+    window.TN_sndbank = instrumentCollection;
+    
+//////////////////////////////////
+    // begin router
+    // define router class 
+
+    var LoopRouter = Backbone.Router.extend ({ 
+        urlSchedule : [],
+        routes: {
+          'loop/:cloneData/cycle/:totalTime': 'doLoop'
+        },
+
+        initialize: function() {
+            console.log('begin');
+            window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            context = new AudioContext();
+       },
+
+        doLoop: function( cloneData, totalTime ) {
+
+            var clones   = cloneData.split(","),
+                schedule = [];
+            _.each( clones, function ( clone, index) {
+                var soundId =  clone.split(":")[0],
+                    loopPercentage =  clone.split(":")[1],
+                    startEventTime = loopPercentage * totalTime;
+                    
+                schedule.push({
+                        instmodel   : TN_sndbank.models[ soundId ],
+                        time        : startEventTime
+                });
+                //TN_sndbank.models[ soundId ].playSound();
+            });
+            //TN_tapereel.playSchedule(schedule);
+            this.urlSchedule = schedule;
+            console.log('doLoop totalTime ' );
+            // need to wait for buffers to be loaded
+            _.each(schedule, function ( seqItem ) {
+                seqItem.instmodel.playSound( seqItem.time);
+            });
+        }
+    }); 
+    // end router
+//////////////////////////////////
+
     
     var TapeReelView = Backbone.View.extend({
         id         : "track-container",
         tagName    : "ul", 
         totalTime  : 2000,
         loopState  : true,
+        sharedSchedule : [],
         events : {},
         initialize : function(){
             _.bindAll(this, 'addItemHandler', 'loadCompleteHandler', 'rescaleLoopClones', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
-            $(window).on( 'resize', this.rescaleLoopClones )
+            $(window).on( 'resize', this.rescaleLoopClones );
         },
         load : function(){
             // AJAX Request
@@ -479,12 +537,16 @@ require([
 
             $(this.el).append(channelView.el);
         },
-
         loadCompleteHandler : function(){
             //console.log('loaded channels without errors!');
             this.render();
+            this.router = new LoopRouter();
+            // cheating? or should it be in init?
+            Backbone.history.start();
+            
         },
         errorHandler : function(){ throw "Error loading JSON file"; },
+        returnUrlSchedule : function ( ) { console.log(this.sharedSchedule) },
         rescaleLoopClones : function ( ) {
             var $track       = this.$el.find('.mixing-track'),
                 $clones      = this.$el.find('.sound-clone'),
@@ -506,7 +568,7 @@ require([
             var $track       = this.$el.find('.mixing-track'),
                 $clones      = this.$el.find('.sound-clone'),
                 trackLength  = this.trackWidth,
-                leftOffset   = this.$el.offset().left - 30,
+                leftOffset   = this.$el.offset().left,
                 timeLength   = this.totalTime,
                 loopSchedule = [];
 
@@ -515,7 +577,7 @@ require([
 
                     var $clone         = $(this),
                         soundIndex     = $clone.data('sound-index'),
-                        left           = parseInt( $clone.css('left') ) - leftOffset,
+                        left           = parseInt( $clone.css('left') ),// - leftOffset,
                         percentOfTime  = left/trackLength,
                         startEventTime = ( (timeLength/1000) * percentOfTime );
 
@@ -526,6 +588,8 @@ require([
                     });
                 });
 
+                //this.router.navigate("looped", true);
+                
                 this.playSchedule( loopSchedule );
                 //LOOPING
     //            setTimeout(function(){
@@ -589,7 +653,6 @@ require([
         },
     });
     
-    //Backbone code - end
 
     // create the instance of control collection:
     var controlCollection = new ControlCollection();
@@ -601,54 +664,7 @@ require([
     var tapeReelView = new TapeReelView({ collection: channelCollection });
     tapeReelView.load();
 
-    // create the instance of soundBank collection:
-    var instrumentCollection = new InstrumentCollection();
-    var soundBank = new SoundBank({ collection: instrumentCollection });
-    soundBank.load();
-
-//////////////////////////////////
-    // begin router
-    // define router class 
     
-    var LoopRouter = Backbone.Router.extend ({ 
-        routes: { 
-            '' : 'home', 
-            'random': 'setRandom' 
-        }, 
-    }); 
-    
-// define new router instance
-	var appRouter = new LoopRouter();
-
-// using router.on()
-	appRouter.on('route:home', function() {
-		//code here
-                alert('home');
-	});
-
-	appRouter.on('route:setRandom', function() {
-		//code here
-                alert('setRandom');
-	});
-    
-    // use html5 History API 
-    Backbone.history.start({pushState: true}); 
-
-    // end router
-//////////////////////////////////
-
-    
-    var TNSQ = {
-        start : function () {
-            
-            window.AudioContext = window.AudioContext||window.webkitAudioContext;
-            context = new AudioContext();
-            return TNSQ;
-        },
-    }
-    
-    window.TNSQ = TNSQ.start();
-    window.TN_sndbank = instrumentCollection;
     window.TN_tapereel = tapeReelView;
     window.TN_controls = controlPanel;
     

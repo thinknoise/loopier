@@ -51,6 +51,17 @@ ul {
   border-width: 11px;
   margin-left: -11px;
 }
+.clue-popup {
+  position: absolute;
+  background-color: #dedede;
+  font-size: 10px;
+  font-size: 1.0rem;
+  padding: 3px 8px;
+  color: #888888;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 30px black;
+}
 #tn-page-container {
   margin-left: auto;
   margin-right: auto;
@@ -85,42 +96,17 @@ ul {
   opacity: 0.8;
   box-shadow: 2px 5px 8px rgba(21, 21, 21, 0.3);
 }
-#tn-page-container .sound-clone .clue-popup,
-#tn-page-container .audio-button .clue-popup {
-  display: none;
-  position: absolute;
-  top: -35px;
-  background-color: #dedede;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  font-size: 10px;
-  font-size: 1.0rem;
-  padding: 3px 8px;
-  color: #888888;
-}
 #tn-page-container #tn-tape-reel {
   position: relative;
 }
-#tn-page-container #tn-tape-reel .clue-popup {
-  position: absolute;
-  background-color: #dedede;
-  font-size: 10px;
-  font-size: 1.0rem;
-  padding: 3px 8px;
-  color: #888888;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-  box-shadow: 0 0 30px black;
-}
 #tn-page-container #tn-tape-reel #track-container {
   width: auto;
-  margin: 0px 30px;
-  padding: 10px;
+  margin: 0px 10px;
+  padding: 0px;
   color: #ebebeb;
 }
 #tn-page-container #tn-tape-reel #track-container .sound-clone {
   opacity: 0.7;
-  border: 0px;
 }
 #tn-page-container #tn-tape-reel #track-container .mixing-track {
   position: relative;
@@ -129,7 +115,6 @@ ul {
   margin-bottom: 10px;
   padding: 0px;
   border: 1px solid #bababa;
-  box-shadow: 0 0 10px rgba(21, 21, 21, 0.3);
   background: -webkit-linear-gradient(#777777, #888888);
   background: -o-linear-gradient(#777777, #888888);
   background: -moz-linear-gradient(#777777, #888888);
