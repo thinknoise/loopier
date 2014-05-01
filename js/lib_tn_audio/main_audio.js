@@ -118,10 +118,11 @@ require([
             "click .control-play"   : "onPlaySequence",
             "click .control-loop"   : "onChangeLoopState",
             "click .control-stop"   : "onLastCall",
+            "click .control-share"  : "onShareClick",
             "click .control-reset"  : "onResetTracks",
         },
         initialize : function(){
-            _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onChangeLoopState', 'onLastCall', 'setPlayButtonToPlay', 'onResetTracks' );
+            _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onChangeLoopState', 'onLastCall', 'onShareClick', 'setPlayButtonToPlay', 'onResetTracks' );
             this.collection.bind('add', this.addItemHandler);
         },
         load : function(){      // AJAX Request
@@ -150,10 +151,10 @@ require([
         onPlaySequence : function ( event ) {
     
             var index = 0,
-                controlClass = this.collection.models[index].get("contolClass"),
-                defaultIcon  = this.collection.models[index].get("buttonIcon"),
-                toggleIcon   = this.collection.models[index].get("toggleIcon"),
-                toggleClass  = this.collection.models[index].get("toggleClass"),
+                controlClass    = this.collection.models[index].get("contolClass"),
+                defaultIcon     = this.collection.models[index].get("buttonIcon"),
+                toggleIcon      = this.collection.models[index].get("toggleIcon"),
+                toggleClass     = this.collection.models[index].get("toggleClass"),
                 playButtonState = this.collection.models[1].get("state");
         
             // if loop buttton state is on set loopState to true
@@ -164,9 +165,9 @@ require([
                 TN_tapereel.loopState = true;
             }
             var isStarted = TN_tapereel.startTapeLoop();
-            
+
             if( isStarted ) {
-                $(event.target).removeClass( defaultIcon +' '+ controlClass )
+                $(".control-play").removeClass( defaultIcon +' '+ controlClass )
                                   .addClass( toggleIcon +' '+ toggleClass );
             }
             
@@ -204,6 +205,10 @@ require([
             $(this.el).find('.control-stop').addClass('danger') ;
             TN_tapereel.loopState = false;
             //this.setPlayButtonToPlay( event )
+        },
+        onShareClick : function () {
+            window.open('mailto:""?subject=A loop from Thinknoise Loopier&body="http://www.thinknoise.com/loopier/#' + Backbone.history.fragment + '"');
+            //alert( "http://www.thinknoise.com/loopier/#" + Backbone.history.fragment );
         },
         setPlayButtonToPlay : function () {
             var index = 0,
@@ -270,10 +275,10 @@ require([
 
             if( !$uiHelper.hasClass('sound-clone') ) {
                 // remove the title for icone replacement
-                $uiHelper.find('.sound-name').remove();
+                //$uiHelper.find('.sound-name').remove();
                 var $cloneParent = $('.mixing-track'),
                     $clone = $uiHelper.clone(true)
-                         .addClass('sound-clone ' + $uiHelper.data('icon') ) 
+                         .addClass('sound-clone') // ' + $uiHelper.data('icon') ) 
                          .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
                          .css({ "padding-left" : "3px", "text-align": "left" })
                          .appendTo( $this )
@@ -304,7 +309,7 @@ require([
             //onsole.log( 'cloneStopped', ui );
             if( $(this).hasClass('tracked') ) {
                 //this isn't pretty -
-                $(this).css({ top:'0px' })
+                $(this).css({ top:'0px' });
                 $(this).removeClass('tracked');
             } else {
                 $(this).remove();
@@ -317,7 +322,7 @@ require([
         className  : 'sound-item',
         template   : null,
         events     : {
-            "click .audio-player" : "onClick",
+            "click .audio-player" : "onClick"
         },
 
         initialize : function(){
@@ -362,7 +367,7 @@ require([
         onStarting : function ( event, ui ) {
             $(ui.helper).css({ 'width': this.model.get('width') });
         },
-        onDragging : function () {},
+        onDragging : function () {}
     });
      
     //We define the collection, associate the map for every item in the list
@@ -406,9 +411,9 @@ require([
             //model is an instance of InstrumentModel
             var instView = new InstrumentView({model:model});
 
+            console.log( model );
             // load sound here 
             this.loadSound( model );
-            
             instView.render();
             $(this.el).append(instView.el);
         },
@@ -416,6 +421,7 @@ require([
         loadCompleteHandler : function(){
             console.log('loaded SoundBank without errors!');
             this.render();
+            
         },
 
         errorHandler : function(){
@@ -431,10 +437,11 @@ require([
         /// need to load here for loading feed back
         loadSound : function ( model ) {
             var request = new XMLHttpRequest(),
-                trackWidth = $('.mixing-track').width;
+                trackWidth = $('.mixing-track').width,
+                self = this;
 
             request.open('GET', model.get("url"), true);
-            request.buttonIndex = model.attributes.snd_id;
+            request.buttonIndex = model.get('snd_id');
             request.responseType = 'arraybuffer';
             // Decode asynchronously
             request.onload = function( ) {
@@ -450,6 +457,18 @@ require([
                     
                     model.set(modelBuffer);
                     
+                    //get ur done - wait till the last one is loaded and play the schedule
+                    if(request.buttonIndex == 23 && urlSchedule) {
+                        //console.log(urlSchedule);
+                        _.each( urlSchedule, function ( soundEvent, index ) {
+                            var i = soundEvent.instmodel.get("index"),
+                                t = soundEvent.percentage;
+                            self.makeClone( $(self.el.children[ i ].children[0]), t );
+                        });
+                        //would rather trigger the event but..
+                        //TN_controls.onPlaySequence();
+                        //TN_tapereel.startTapeLoop();
+                    }
                 }, this.onLoadSoundError);
             }
             request.send();
@@ -457,6 +476,42 @@ require([
         onLoadSoundError : function ( error ) {
             console.log( error );
         },
+        makeClone : function ( $master, percentOnTrack ) {
+    
+            if( !$master.hasClass('sound-clone') ) {
+                // 
+                var $cloneParent = $('.mixing-track').first(),
+                    $clone = $master.clone(),
+                    index  = $clone.data('sound-index');
+                    
+                $clone.addClass('sound-clone' ) 
+                        .removeClass('audio-button draggable ui-draggable ')
+                        .appendTo( $cloneParent )
+                        .draggable({
+                           snap     : '.mixing-track',
+                           snapMode : 'inner',
+                           stop     : this.madeCloneStop,
+                        })
+                        .on( 'click', function (e) { TN_sndbank.models[index].playSound(); } );
+                 
+                // set width
+                $clone.css({ 'width': this.collection.models[index].get('width') });
+                var leftAdjust = percentOnTrack * $cloneParent.width();
+                var topAdjust = 0;
+                $clone.css({left: leftAdjust, top: "0px" });
+                $clone
+            }
+        },
+        madeCloneStop : function ( event, ui ) {
+            console.log( 'cloneStopped', ui );
+            if( $(this).hasClass('tracked') ) {
+                //this isn't pretty -
+                $(this).css({ top:'0px' });
+                $(this).removeClass('tracked');
+            } else {
+                $(this).remove();
+            }
+        }
     });
 
     // create the instance of soundBank collection:
@@ -470,7 +525,6 @@ require([
     // define router class 
 
     var LoopRouter = Backbone.Router.extend ({ 
-        urlSchedule : [],
         routes: {
           'loop/:cloneData/cycle/:totalTime': 'doLoop'
         },
@@ -488,21 +542,20 @@ require([
             _.each( clones, function ( clone, index) {
                 var soundId =  clone.split(":")[0],
                     loopPercentage =  clone.split(":")[1],
-                    startEventTime = loopPercentage * totalTime;
+                    startEventTime = (totalTime/1000) *  (loopPercentage/100);
                     
                 schedule.push({
                         instmodel   : TN_sndbank.models[ soundId ],
-                        time        : startEventTime
+                        time        : startEventTime,
+                        percentage  : loopPercentage/100
                 });
                 //TN_sndbank.models[ soundId ].playSound();
             });
-            //TN_tapereel.playSchedule(schedule);
-            this.urlSchedule = schedule;
+
+            // GET UR DONE
+            urlSchedule = schedule;
             console.log('doLoop totalTime ' );
             // need to wait for buffers to be loaded
-            _.each(schedule, function ( seqItem ) {
-                seqItem.instmodel.playSound( seqItem.time);
-            });
         }
     }); 
     // end router
@@ -563,20 +616,21 @@ require([
             this.trackWidth = trackWidth;
             
         },
-        startTapeLoop : function ( e ) {
+        startTapeLoop : function () {
 
             var $track       = this.$el.find('.mixing-track'),
                 $clones      = this.$el.find('.sound-clone'),
                 trackLength  = this.trackWidth,
                 leftOffset   = this.$el.offset().left,
                 timeLength   = this.totalTime,
+                loopUrl      = "",
                 loopSchedule = [];
 
             if($clones.length) {
                 $clones.each( function () {
 
                     var $clone         = $(this),
-                        soundIndex     = $clone.data('sound-index'),
+                        soundIndex     = $clone.data('sound-index'),//this should come from soundbank model
                         left           = parseInt( $clone.css('left') ),// - leftOffset,
                         percentOfTime  = left/trackLength,
                         startEventTime = ( (timeLength/1000) * percentOfTime );
@@ -586,9 +640,10 @@ require([
                         instmodel   : TN_sndbank.models[ soundIndex ],
                         time        : startEventTime
                     });
+                    loopUrl += soundIndex + ":" + Math.round(percentOfTime*100) + ","
                 });
-
-                //this.router.navigate("looped", true);
+                loopUrl = loopUrl.substr(0, (loopUrl.length-1) ) + "/cycle/2000";
+                this.router.navigate("loop/" + loopUrl, true);
                 
                 this.playSchedule( loopSchedule );
                 //LOOPING
@@ -642,6 +697,7 @@ require([
                     $(clone).remove()
                 })
             });
+            this.router.navigate("loop", true);
         },
         render : function(){
             //we assign our element into the available dom element

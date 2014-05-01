@@ -145,5 +145,26 @@
         "name"      : "Snare3",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-screenshot"
+    },
+    {
+        "snd_id"    : 21,
+        "url"       : "audio/Gadget 09.wav",
+        "name"      : "gadget",
+        "icon"      : "icon-grater",
+        "glyphicon" : "glyphicons keyboard-wireless"
+    },
+    {
+        "snd_id"    : 22,
+        "url"       : "audio/Light Switch 01.wav",
+        "name"      : "Light Switch",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
+    },
+    {
+        "snd_id"    : 23,
+        "url"       : "audio/Tape Measure Closed 04.wav",
+        "name"      : "Tape Measure",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-screenshot"
     }
 ]

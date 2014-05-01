@@ -39,6 +39,7 @@ body {
 h1 {
     font-size       : 33px;
     font-size       : 3.3rem;
+    margin          : 0px
 }
 ul { 
     list-style      : none;
@@ -121,23 +122,35 @@ ul {
         line-height: 20px;
         margin     : 0px;
         border     : 1px solid @color21;
+        .sound-name {
+            font-size       : 12px;
+            font-size       : 1.2rem;
+            overflow        : hidden;
+            text-overflow   : ellipsis;
+        }
+
         &.ui-draggable-dragging {
+            .sound-name {
+                position        : relative;
+                overflow        : visible;
+                text-overflow   : clip;
+                font-size       : 8px;
+                font-size       : 0.8rem;
+                top             : -30px;
+            }
             opacity     : 0.8; 
-            box-shadow      : 2px 5px 8px @color21_5;
+            box-shadow  : 2px 5px 8px @color21_5;
         }
 
     }
     #tn-tape-reel {
         position            : relative;
+
         #track-container{
             width           : auto;
             margin          : 0px 10px;
             padding         : 0px;
             color           : @colorEB;
-
-            .sound-clone {
-                opacity    : 0.7; 
-            }
 
             .track-gradiant-off( @start-color : @color45, @end-color : @color8) {
                 background      : -webkit-linear-gradient( @start-color, @end-color );
@@ -155,6 +168,13 @@ ul {
                 border          : 1px solid @colorBA;
                 //box-shadow      : 0 0 10px @color21_5;
                 .track-gradiant-off( @color7, @color8 );
+
+                .sound-clone {
+                    position        : absolute;
+                    opacity         : 0.7; 
+                    padding-left    : 3px;
+                    text-align      : left;
+                }
 
                 &.track-hover {
                     .track-gradiant-off( @color8, @colorA1 );
@@ -183,7 +203,7 @@ ul {
 
             .player-controls {
                 display         : inline-block;
-                margin          : 10px;
+                margin          : 0px 10px;
                 padding         : 0px 10px;
                 font-size       : 40px;
                 font-size       : 4.0rem;

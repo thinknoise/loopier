@@ -17,6 +17,7 @@ body {
 h1 {
   font-size: 33px;
   font-size: 3.3rem;
+  margin: 0px;
 }
 ul {
   list-style: none;
@@ -91,10 +92,26 @@ ul {
   margin: 0px;
   border: 1px solid #212121;
 }
+#tn-page-container .sound-clone .sound-name,
+#tn-page-container .audio-button .sound-name {
+  font-size: 12px;
+  font-size: 1.2rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 #tn-page-container .sound-clone.ui-draggable-dragging,
 #tn-page-container .audio-button.ui-draggable-dragging {
   opacity: 0.8;
   box-shadow: 2px 5px 8px rgba(21, 21, 21, 0.3);
+}
+#tn-page-container .sound-clone.ui-draggable-dragging .sound-name,
+#tn-page-container .audio-button.ui-draggable-dragging .sound-name {
+  position: relative;
+  overflow: visible;
+  text-overflow: clip;
+  font-size: 8px;
+  font-size: 0.8rem;
+  top: -30px;
 }
 #tn-page-container #tn-tape-reel {
   position: relative;
@@ -104,9 +121,6 @@ ul {
   margin: 0px 10px;
   padding: 0px;
   color: #ebebeb;
-}
-#tn-page-container #tn-tape-reel #track-container .sound-clone {
-  opacity: 0.7;
 }
 #tn-page-container #tn-tape-reel #track-container .mixing-track {
   position: relative;
@@ -119,6 +133,12 @@ ul {
   background: -o-linear-gradient(#777777, #888888);
   background: -moz-linear-gradient(#777777, #888888);
   background: linear-gradient(#777777, #888888);
+}
+#tn-page-container #tn-tape-reel #track-container .mixing-track .sound-clone {
+  position: absolute;
+  opacity: 0.7;
+  padding-left: 3px;
+  text-align: left;
 }
 #tn-page-container #tn-tape-reel #track-container .mixing-track.track-hover {
   background: -webkit-linear-gradient(#888888, #a1a1a1);
@@ -143,7 +163,7 @@ ul {
 }
 #tn-page-container #tn-controls-container .control-block .player-controls {
   display: inline-block;
-  margin: 10px;
+  margin: 0px 10px;
   padding: 0px 10px;
   font-size: 40px;
   font-size: 4.0rem;

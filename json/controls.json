@@ -11,9 +11,9 @@
         "type"          : "check-box",
         "altText"       : "loop",
         "contolClass"   : "control-loop",
-        "buttonIcon"    : "fa fa-refresh",
+        "buttonIcon"    : "fa fa-check",
         "toggleClass"   : "control-loop",
-        "toggleIcon"    : "fa fa-check",
+        "toggleIcon"    : "fa fa-refresh",
         "state"           : "default"
     },
     {
