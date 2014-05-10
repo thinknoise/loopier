@@ -139,7 +139,7 @@ require([
             $(this.el).append(knobView.el);
         },
         loadCompleteHandler : function(){
-            console.log('loaded knobs without errors!');
+            //console.log('loaded knobs without errors!');
             this.render();
         },
         errorHandler : function(){ throw "Error loading JSON file"; },
@@ -252,7 +252,7 @@ require([
         },
         // TODO: ??
         renderClone : function( track, pos ){
-            console.log( track, pos )
+            //console.log( track, pos )
         },
         playSequence : function () {
             //TODO: make tracks specific to sounds and onClick clones a new snd on the track
@@ -297,7 +297,7 @@ require([
             }
         },
         makeClone : function () {
-            console.log("makeClone");
+            //console.log("makeClone");
         },
         cloneDragged : function ( event, ui ) {
             //console.log( 'cloneStarted', ui );
@@ -411,7 +411,7 @@ require([
             //model is an instance of InstrumentModel
             var instView = new InstrumentView({model:model});
 
-            console.log( model );
+            //console.log( model );
             // load sound here 
             this.loadSound( model );
             instView.render();
@@ -419,7 +419,7 @@ require([
         },
 
         loadCompleteHandler : function(){
-            console.log('loaded SoundBank without errors!');
+            //console.log('loaded SoundBank without errors!');
             this.render();
             
         },
@@ -474,7 +474,7 @@ require([
             request.send();
         },
         onLoadSoundError : function ( error ) {
-            console.log( error );
+            //console.log( error );
         },
         makeClone : function ( $master, percentOnTrack ) {
     
@@ -503,7 +503,7 @@ require([
             }
         },
         madeCloneStop : function ( event, ui ) {
-            console.log( 'cloneStopped', ui );
+            //console.log( 'cloneStopped', ui );
             if( $(this).hasClass('tracked') ) {
                 //this isn't pretty -
                 $(this).css({ top:'0px' });
@@ -530,7 +530,7 @@ require([
         },
 
         initialize: function() {
-            console.log('begin');
+            //console.log('begin');
             window.AudioContext = window.AudioContext||window.webkitAudioContext;
             context = new AudioContext();
        },
@@ -554,7 +554,7 @@ require([
 
             // GET UR DONE
             urlSchedule = schedule;
-            console.log('doLoop totalTime ' );
+            //console.log('doLoop totalTime ' );
             // need to wait for buffers to be loaded
         }
     }); 
@@ -599,7 +599,9 @@ require([
             
         },
         errorHandler : function(){ throw "Error loading JSON file"; },
-        returnUrlSchedule : function ( ) { console.log(this.sharedSchedule) },
+        returnUrlSchedule : function ( ) { 
+            //console.log(this.sharedSchedule) 
+        },
         rescaleLoopClones : function ( ) {
             var $track       = this.$el.find('.mixing-track'),
                 $clones      = this.$el.find('.sound-clone'),
@@ -653,7 +655,7 @@ require([
                 return true;
             } else {
                 //nothing on the track
-                console.log('nothing on the track');
+                //console.log('nothing on the track');
                 this.stopSequence();
                 return false;
             }
