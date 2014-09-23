@@ -87,7 +87,6 @@ require([
     var instrumentCollection = new InstrumentCollection();
     var soundBank = new Sound_Bank_View({ collection: instrumentCollection });
     soundBank.load();
-    window.TN_sndbank = instrumentCollection;
 
     // create the instance of control collection:
     var controlCollection = new ControlCollection();
@@ -100,6 +99,7 @@ require([
     tapeReelView.load();
 
 
+    window.TN_sndbank = instrumentCollection;
     window.TN_tapereel = tapeReelView;
     window.TN_controls = controlPanel;
 

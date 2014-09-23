@@ -12,25 +12,6 @@ define([
     $
 
 ) {
-    // CONTROL KNOBS 
-    var KnobView = Backbone.View.extend({
-        tagName    : 'li',
-        className  : 'player-controls list-inline',
-        template   : null,
-        state      : "default",
-        events     : {},
-        initialize : function(){
-            _.bindAll(this, 'render' );
-
-            this.template = _.template(
-                "<span title='<%= altText %>' class='<%= contolClass %> <%= buttonIcon %> '></span>"
-            );
-        },
-        render : function(){
-            $(this.el).html( this.template( this.model.toJSON() ) );
-        }
-    });
-
     //Main View for the list
     var Control_Panel = Backbone.View.extend({
         id         : "dt-player-controls",
