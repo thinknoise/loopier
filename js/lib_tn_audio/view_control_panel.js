@@ -12,7 +12,7 @@ define([
     $
 
 ) {
-    // CONTROL KNOBS being called with the model
+    // CONTROL KNOBS 
     var KnobView = Backbone.View.extend({
         tagName    : 'li',
         className  : 'player-controls list-inline',
