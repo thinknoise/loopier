@@ -18,14 +18,15 @@ define([
 
     var Loop_Router = Backbone.Router.extend ({
         routes: {
-          'loop/:cloneData/cycle/:totalTime': 'doLoop'
+          'loop/:cloneData/cycle/:totalTime': 'doLoop',
+          '': 'noLoop'
         },
 
         initialize: function() {
             //console.log('begin');
             window.AudioContext = window.AudioContext||window.webkitAudioContext;
             context = new AudioContext();
-       },
+        },
 
         doLoop: function( cloneData, totalTime ) {
 
@@ -48,6 +49,10 @@ define([
             urlSchedule = schedule;
             //console.log('doLoop totalTime ' );
             // need to wait for buffers to be loaded
+        },
+
+        noLoop: function () {
+            urlSchedule = [];
         }
     });
     // end router

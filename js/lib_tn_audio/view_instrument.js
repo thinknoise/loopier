@@ -55,7 +55,7 @@ define([
             });
         },
         onClick : function () {
-            this.model.playSound();
+            this.model.playSound(0);
         },
         popupOn : function () {
             // TODO: this needs different triggers
