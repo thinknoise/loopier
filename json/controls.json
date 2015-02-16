@@ -5,7 +5,20 @@
         "contolClass"   : "control-play",
         "buttonIcon"    : "fa fa-play-circle-o",
         "toggleClass"   : "control-stop",
-        "toggleIcon"    : "fa fa-times-circle-o"
+        "toggleIcon"    : "fa fa-times-circle-o",
+        "state"         : false
+    },
+    {
+        "type"          : "plus-btn",
+        "altText"       : "add track",
+        "contolClass"   : "control-plus",
+        "buttonIcon"    : "fa fa-plus"
+    },
+    {
+        "type"          : "minus-btn",
+        "altText"       : "kill track",
+        "contolClass"   : "control-minus",
+        "buttonIcon"    : "fa fa-minus"
     },
     {
         "type"          : "check-box",
@@ -14,7 +27,7 @@
         "buttonIcon"    : "fa fa-check",
         "toggleClass"   : "control-loop",
         "toggleIcon"    : "fa fa-refresh",
-        "state"           : "default"
+        "state"         : true
     },
     {
         "type"          : "share-btn",

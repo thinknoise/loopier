@@ -16,7 +16,6 @@ define([
     // Individual Channel/track
     var Channel_Model = Backbone.Model.extend({
         defaults  : {
-            id          : null,
             volume      : 0.7,
             pan         : 0,
             urlSchedule : []

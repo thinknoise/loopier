@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : audio_main
     Created on : Apr 6, 2014, 9:26:57 AM
     Author     : wiley
@@ -165,9 +165,8 @@ ul {
   display: inline-block;
   margin: 0px 10px;
   padding: 0px 10px;
-  font-size: 40px;
-  font-size: 4.0rem;
-  width: 60px;
+  font-size: 30px;
+  font-size: 3.0rem;
 }
 #tn-page-container #tn-controls-container .control-block .player-controls .danger {
   color: red;
@@ -196,8 +195,9 @@ ul {
   }
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
-    padding: 0px 20px;
-    width: 100px;
+    padding: 0px 10px;
+    font-size: 40px;
+    font-size: 4.0rem;
   }
 }
 @media (min-width: 768px) {
@@ -219,7 +219,6 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 30px;
-    width: 120px;
   }
 }
 @media (min-width: 1024px) {
@@ -237,6 +236,5 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 40px;
-    width: 180px;
   }
 }

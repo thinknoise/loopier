@@ -1,5 +1,6 @@
 define([
     'viewChannel',
+    'modelChannel',
     'routerLoop',
     'backbone',
     'underscore',
@@ -9,6 +10,7 @@ define([
 
 ], function (
     Channel_View,
+    Channel_Model,
     Loop_Router,
     Backbone,
     _,
@@ -20,11 +22,10 @@ define([
         id         : "track-container",
         tagName    : "ul",
         totalTime  : 2000,
-        loopState  : true,
         sharedSchedule : [],
         events : {},
         initialize : function(){
-            _.bindAll(this, 'addItemHandler', 'loadCompleteHandler', 'rescaleLoopClones', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
+            _.bindAll(this, 'addItemHandler', 'addTrackToReel', 'loadCompleteHandler', 'rescaleLoopClones', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
             $(window).on( 'resize', this.rescaleLoopClones );
         },
@@ -43,6 +44,14 @@ define([
             channelView.render();
 
             $(this.el).append(channelView.el);
+        },
+        addTrackToReel : function() {
+            var newChannelModel = new Channel_Model();
+            var newChannelview = new Channel_View({ model:newChannelModel });
+            newChannelview.render();
+
+            $(this.el).append(newChannelview.el);
+            return true;
         },
         loadCompleteHandler : function(){
             //console.log('loaded channels without errors!');
@@ -104,10 +113,11 @@ define([
                 });
                 loopUrl = loopUrl.substr(0, (loopUrl.length-1) ) + "/cycle/2000";
 
+                TN_tapereel.collection.models[0].set('urlSchedule', loopSchedule );
                 //this fires off the router
                 this.router.navigate("loop/" + loopUrl, true);
 
-                this.playSchedule( loopSchedule );
+                this.playSchedule();
                 return true;
             } else {
                 //nothing on the track
@@ -116,8 +126,8 @@ define([
                 return false;
             }
         },
-        playSchedule : function ( seqSchedule ) {
-
+        playSchedule : function (  ) {
+            var seqSchedule = TN_tapereel.collection.models[0].get('urlSchedule')
             _.each(seqSchedule, function ( seqItem ) {
                 seqItem.instmodel.playSound( seqItem.time);
             });
@@ -132,9 +142,8 @@ define([
                 this.totalTime,
                 "linear",
                 function () { // start at beginning again when this is done
-                    //console.log(self.loopState);
-                    if(self.loopState) {
-                        self.startTapeLoop();
+                    if(TN_controls.getLoopControlState()) {
+                        self.playSchedule();
                     } else {
                         self.stopSequence();
                     }
