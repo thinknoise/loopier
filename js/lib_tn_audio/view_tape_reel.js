@@ -142,7 +142,8 @@ define([
                 this.totalTime,
                 "linear",
                 function () { // start at beginning again when this is done
-                    if(TN_controls.getLoopControlState()) {
+                    //console.log( 'play', TN_controls.getControlState( "control-play" ) );
+                    if( TN_controls.getControlState( "control-loop" ) && TN_controls.getControlState( "control-play" ) ) {
                         self.playSchedule();
                     } else {
                         self.stopSequence();

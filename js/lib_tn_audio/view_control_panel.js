@@ -83,6 +83,7 @@ define([
 
             var isStarted = TN_tapereel.startTapeLoop();
             if( isStarted ) {
+                this.setControlState( "control-play", true )
                 $(".control-play").removeClass( playBtn_m.get("buttonIcon") +' '+ playBtn_m.get("contolClass") )
                                   .addClass   ( playBtn_m.get("toggleIcon") +' '+ playBtn_m.get("toggleClass") );
             }
@@ -92,36 +93,37 @@ define([
             var loop_m = this.collection.findWhere({ contolClass : "control-loop"});
 
             //toggle the looping button
-            if ( this.getLoopControlState() ) {
-                this.setLoopControlState( false ); // oneshot
+            if ( this.getControlState( "control-loop" ) ) {
+                this.setControlState( "control-loop", false ); // oneshot
                 $(event.target).removeClass( loop_m.get("buttonIcon") +' '+ loop_m.get("contolClass") )
                                   .addClass( loop_m.get("toggleIcon") +' '+ loop_m.get("toggleClass") );
                 // flip play button to play state - flag for stop
                 this.onLastCall();
             } else {
-                this.setLoopControlState( true ); // looping
+                this.setControlState( "control-loop", true ); // looping
                 $(event.target).removeClass( loop_m.get("toggleIcon") +' '+ loop_m.get("toggleClass") )
                                   .addClass( loop_m.get("buttonIcon") +' '+ loop_m.get("contolClass") );
             }
         },
         onLastCall : function ( event ) {
             $(this.el).find('.control-stop').addClass('danger') ;
-            this.setLoopControlState( false ); // oneshot
+            this.setControlState( "control-play", false ); // oneshot
         },
-        onShareClick : function () {
-            window.open('mailto:""?subject=A loop from Thinknoise Loopier&body="http://www.thinknoise.com/loopier/#' + Backbone.history.fragment + '"');
+        setControlState : function ( knobControl, state ) {
+            //console.log (knobControl, " set to ", state )
+            return this.collection.findWhere({ contolClass : knobControl }).set("state", state);
         },
-        setLoopControlState : function ( state ) {
-            return this.collection.findWhere({ contolClass : "control-loop"}).set("state", state);
-        },
-        getLoopControlState : function () {
-            return this.collection.findWhere({ contolClass : "control-loop"}).get("state");
+        getControlState : function ( knobControl ) {
+            return this.collection.findWhere({ contolClass : knobControl }).get("state");
         },
         setPlayButtonToPlay : function () {
             var playBtn_m = this.collection.findWhere({ contolClass : "control-play"});
 
             $(this.el).find('.control-stop').removeClass( playBtn_m.get("toggleClass") + ' danger ' + playBtn_m.get("toggleIcon") )
                                                .addClass( playBtn_m.get("buttonIcon") +' '+ playBtn_m.get("contolClass") );
+        },
+        onShareClick : function () {
+            window.open('mailto:""?subject=A loop from Thinknoise Loopier&body="http://www.thinknoise.com/loopier/#' + Backbone.history.fragment + '"');
         },
         onResetTracks : function ( ) {
             TN_tapereel.onClearTapeReel();

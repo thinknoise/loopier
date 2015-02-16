@@ -9,18 +9,6 @@
         "state"         : false
     },
     {
-        "type"          : "plus-btn",
-        "altText"       : "add track",
-        "contolClass"   : "control-plus",
-        "buttonIcon"    : "fa fa-plus"
-    },
-    {
-        "type"          : "minus-btn",
-        "altText"       : "kill track",
-        "contolClass"   : "control-minus",
-        "buttonIcon"    : "fa fa-minus"
-    },
-    {
         "type"          : "check-box",
         "altText"       : "loop",
         "contolClass"   : "control-loop",
