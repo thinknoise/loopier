@@ -30,7 +30,7 @@ define([
           source.buffer = this.get('audioBuffer');
           //source.loop = true;
           source.connect( context.destination );
-          //console.log( context.currentTime );
+          console.log( time );
           source[ source.start ? 'start' : 'noteOn'](time + context.currentTime);
       }
   });

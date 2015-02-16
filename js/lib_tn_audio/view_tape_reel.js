@@ -75,6 +75,7 @@ define([
         startTapeLoop : function () {
 
             var $track       = this.$el.find('.mixing-track'),
+                $trackElements = $(this.collection.models[0].get('urlSchedule')),// something to think about
                 $clones      = this.$el.find('.sound-clone'),
                 trackLength  = this.trackWidth,
                 leftOffset   = this.$el.offset().left,
@@ -84,28 +85,29 @@ define([
 
             if($clones.length) {
                 $clones.each( function () {
-
+                    //this is where its taken from the DOM and
                     var $clone         = $(this),
-                        soundIndex     = $clone.data('sound-index'),//this should come from soundbank model
+                        soundIndex     = $clone.data('sound-index'),// this should come from soundbank model - cant until this is seporrated from the router
                         left           = parseInt( $clone.css('left') ),// - leftOffset,
                         percentOfTime  = left/trackLength,
-                        startEventTime = ( (timeLength/1000) * percentOfTime );
+                        startEventTime = ( (timeLength/1000) * percentOfTime ),
+                        trackNo        = $clone.parent().index();
 
                     //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
+                    //should loopSchedule be a model?
                     loopSchedule.push({
                         instmodel   : TN_sndbank.models[ soundIndex ],
-                        time        : startEventTime
+                        time        : startEventTime,
+                        track       : $clone.parent().index()
                     });
-                    loopUrl += soundIndex + ":" + Math.round(percentOfTime*100) + ","
+                    loopUrl += soundIndex + ":" + Math.round(percentOfTime*100) + ":" + trackNo + ","
                 });
                 loopUrl = loopUrl.substr(0, (loopUrl.length-1) ) + "/cycle/2000";
+
+                //this fires off the router
                 this.router.navigate("loop/" + loopUrl, true);
 
                 this.playSchedule( loopSchedule );
-                //LOOPING
-    //            setTimeout(function(){
-    //                TNSQ.playSchedule( loopSchedule );
-    //            },TNSQ.totalTime);
                 return true;
             } else {
                 //nothing on the track
@@ -129,7 +131,7 @@ define([
                 },
                 this.totalTime,
                 "linear",
-                function () {
+                function () { // start at beginning again when this is done
                     //console.log(self.loopState);
                     if(self.loopState) {
                         self.startTapeLoop();

@@ -85,13 +85,15 @@ define([
 
                     model.set(modelBuffer);
 
-                    //get ur done - wait till the last one is loaded and play the schedule
-                    if(request.buttonIndex == 23 && urlSchedule) {
+                    if(request.buttonIndex == 23 && TN_tapereel.collection.models[0].get('urlSchedule') ) {
+                        var urlSchedule = TN_tapereel.collection.models[0].get('urlSchedule');
                         //console.log(urlSchedule);
                         _.each( urlSchedule, function ( soundEvent, index ) {
-                            var i = soundEvent.instmodel.get("index"),
-                                t = soundEvent.percentage;
-                            self.makeClone( $(self.el.children[ i ].children[0]), t );
+                            var index = soundEvent.instmodel.get("index"),
+                                percentage = soundEvent.percentage
+                                track      = soundEvent.track;
+
+                            self.makeClone( $(self.el.children[ index ].children[0]), percentage, track );
                         });
                         //would rather trigger the event but..
                         //TN_controls.onPlaySequence();
@@ -104,11 +106,11 @@ define([
         onLoadSoundError : function ( error ) {
             //console.log( error );
         },
-        makeClone : function ( $master, percentOnTrack ) {
+        makeClone : function ( $master, percentOnTrack, trackNo ) {
 
             if( !$master.hasClass('sound-clone') ) {
                 //
-                var $cloneParent = $('.mixing-track').first(),
+                var $cloneParent = $('.mixing-track').eq(trackNo),
                     $clone = $master.clone(),
                     index  = $clone.data('sound-index');
 
@@ -120,7 +122,7 @@ define([
                            snapMode : 'inner',
                            stop     : this.madeCloneStop,
                         })
-                        .on( 'click', function (e) { TN_sndbank.models[index].playSound(); } );
+                        .on( 'click', function (e) { TN_sndbank.models[index].playSound(0); } );
 
                 // set width
                 $clone.css({ 'width': this.collection.models[index].get('width') });

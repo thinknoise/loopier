@@ -68,6 +68,8 @@ define([
             if( !$uiHelper.hasClass('sound-clone') ) {
                 // remove the title for icone replacement
                 //$uiHelper.find('.sound-name').remove();
+                // this doesn't set a track clone model (thats done on load)
+                // btw $cloneParent is $this
                 var $cloneParent = $('.mixing-track'),
                     $clone = $uiHelper.clone(true)
                          .addClass('sound-clone') // ' + $uiHelper.data('icon') )

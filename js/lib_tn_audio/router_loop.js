@@ -1,4 +1,5 @@
 define([
+    'modelChannel',
     'backbone',
     'underscore',
     'jQuery',
@@ -6,7 +7,7 @@ define([
     'jQueryTouch'
 
 ], function (
-
+    Channel_Model,
     Backbone,
     _,
     $
@@ -35,24 +36,23 @@ define([
             _.each( clones, function ( clone, index) {
                 var soundId =  clone.split(":")[0],
                     loopPercentage =  clone.split(":")[1],
-                    startEventTime = (totalTime/1000) *  (loopPercentage/100);
+                    startEventTime = (totalTime/1000) *  (loopPercentage/100),
+                    track          = clone.split(":")[2];
 
                 schedule.push({
                         instmodel   : TN_sndbank.models[ soundId ],
                         time        : startEventTime,
-                        percentage  : loopPercentage/100
+                        percentage  : loopPercentage/100,
+                        track       : track
                 });
                 //TN_sndbank.models[ soundId ].playSound();
             });
 
-            // GET UR DONE
-            urlSchedule = schedule;
-            //console.log('doLoop totalTime ' );
-            // need to wait for buffers to be loaded
+            TN_tapereel.collection.models[0].set('urlSchedule', schedule );
         },
 
         noLoop: function () {
-            urlSchedule = [];
+
         }
     });
     // end router
