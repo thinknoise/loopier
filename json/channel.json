@@ -8,5 +8,15 @@
         "channel_id": 2,
         "volume"    : 1,
         "pan"       : 0.5
+    },
+    {
+        "channel_id": 3,
+        "volume"    : 1,
+        "pan"       : 0
+    },
+    {
+        "channel_id": 4,
+        "volume"    : 1,
+        "pan"       : 0
     }
 ]
