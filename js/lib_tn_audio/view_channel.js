@@ -68,10 +68,11 @@ define([
             if( !$uiHelper.hasClass('sound-clone') ) {
                 // remove the title for icone replacement
                 //$uiHelper.find('.sound-name').remove();
-                // this doesn't set a track clone model (thats done on load)
-                // btw $cloneParent is $this
-                var $cloneParent = $('.mixing-track'),
-                    $clone = $uiHelper.clone(true)
+                // >> cloneParent may be this...
+                var $cloneParent = $('.mixing-track');
+
+                // laying it down on the track
+                var $clone = $uiHelper.clone(true)
                          .addClass('sound-clone') // ' + $uiHelper.data('icon') )
                          .removeClass('audio-button draggable ui-draggable ui-draggable-dragging')
                          .css({ "padding-left" : "3px", "text-align": "left" })
@@ -88,6 +89,10 @@ define([
                 var leftAdjust = $clone.position().left - $cloneParent.offset().left + 10;
                 var topAdjust = 0;
                 $clone.css({left: leftAdjust, top: "0px" });
+
+                // this means its changed and
+                TN_tapereel.codifyDomToLoop();
+
             }
         },
         makeClone : function () {
@@ -100,7 +105,7 @@ define([
             //console.log( 'cloneDropped', ui );
         },
         cloneStopped : function ( event, ui ) {
-            //onsole.log( 'cloneStopped', ui );
+            //console.log( 'cloneStopped', ui );
             if( $(this).hasClass('tracked') ) {
                 //this isn't pretty -
                 $(this).css({ top:'0px' });
@@ -108,6 +113,7 @@ define([
             } else {
                 $(this).remove();
             }
+            TN_tapereel.codifyDomToLoop();
         }
     });
 

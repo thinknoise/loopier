@@ -81,7 +81,7 @@ define([
 
             var playBtn_m = this.collection.findWhere({ contolClass : "control-play"});
 
-            var isStarted = TN_tapereel.startTapeLoop();
+            var isStarted = TN_tapereel.playSchedule();
             if( isStarted ) {
                 this.setControlState( "control-play", true )
                 $(".control-play").removeClass( playBtn_m.get("buttonIcon") +' '+ playBtn_m.get("contolClass") )
