@@ -98,9 +98,10 @@ require([
     var tapeReelView = new Tape_Reel_View({ collection: channelCollection });
     tapeReelView.load();
 
-
+    console.log('start');
     window.TN_sndbank = instrumentCollection;
     window.TN_tapereel = tapeReelView;
     window.TN_controls = controlPanel;
+
 
 });

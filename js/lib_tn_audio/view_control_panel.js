@@ -46,6 +46,8 @@ define([
             "click .control-reset"  : "onResetTracks",
         },
         initialize : function(){
+            $(this.el).append('<div class="loading">Loading Control Panel</div>');
+            this.render();
             _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onPlusTrack', 'onMinusTrack', 'onChangeLoopState', 'onLastCall', 'onShareClick', 'setPlayButtonToPlay', 'onResetTracks' );
             this.collection.bind('add', this.addItemHandler);
         },
@@ -64,6 +66,7 @@ define([
         },
         loadCompleteHandler : function(){
             //console.log('loaded knobs without errors!');
+            $(this.el).find('.loading').remove();
             this.render();
         },
         errorHandler : function(){ throw "Error loading JSON file"; },

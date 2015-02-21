@@ -36,8 +36,10 @@ define([
             });
 
             this.template = _.template(
-                "<div class='indicator'></div>"
+                "<div class='track-grid'><div class='marker'></div><div class='marker'></div><div class='marker'></div></div><div class='indicator'></div>"
             );
+
+
         },
         render : function(){
             $(this.el).html( this.template( this.model.toJSON() ) );

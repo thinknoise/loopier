@@ -25,6 +25,8 @@ define([
         sharedSchedule : [],
         events : {},
         initialize : function(){
+            $(this.el).append('<div class="loading">LOADING tracks</div>');
+            this.render();
             _.bindAll(this, 'addItemHandler', 'addTrackToReel', 'loadCompleteHandler', 'rescaleLoopClones', 'codifyDomToLoop', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
             $(window).on( 'resize', this.rescaleLoopClones );
@@ -55,6 +57,7 @@ define([
         },
         loadCompleteHandler : function(){
             //console.log('loaded channels without errors!');
+            $(this.el).find('.loading').remove();
             this.render();
             this.router = new Loop_Router();
             // cheating? or should it be in init?
@@ -167,7 +170,7 @@ define([
         },
         render : function(){
             //we assign our element into the available dom element
-            $('#tn-tape-reel').append("<div class='clue-popup arrow_box  hidden  '>drag a sound onto a track</div>");
+            //$('#tn-tape-reel').append("<div class='clue-popup arrow_box  hidden  '>drag a sound onto a track</div>");
             $('#tn-tape-reel').append($(this.el));
             this.trackWidth = $(this.el).width();
 

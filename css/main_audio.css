@@ -11,7 +11,7 @@ body {
   margin: 0px;
   width: 100%;
   font-family: Helvetica, Arial, sans-serif;
-  color: #000;
+  color: #ebebeb;
   background-color: #181818;
 }
 h1 {
@@ -152,10 +152,23 @@ ul {
   background-color: #dedede;
 }
 #tn-page-container #tn-tape-reel #track-container .mixing-track .indicator {
+  z-index: 1;
+  position: absolute;
+  top: 0px;
   height: 100%;
   width: 0px;
   border-right: 1px solid #FFF;
   margin-left: 0px;
+}
+#tn-page-container #tn-tape-reel #track-container .mixing-track .track-grid {
+  z-index: 10;
+  height: 100%;
+}
+#tn-page-container #tn-tape-reel #track-container .mixing-track .marker {
+  display: inline-block;
+  height: 100%;
+  width: 20%;
+  border-right: 1px solid #aaaaaa;
 }
 #tn-page-container #tn-controls-container .control-block {
   text-align: center;
@@ -165,8 +178,9 @@ ul {
   display: inline-block;
   margin: 0px 10px;
   padding: 0px 10px;
-  font-size: 30px;
-  font-size: 3.0rem;
+  font-size: 40px;
+  font-size: 4.0rem;
+  width: 60px;
 }
 #tn-page-container #tn-controls-container .control-block .player-controls .danger {
   color: red;
@@ -195,9 +209,8 @@ ul {
   }
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
-    padding: 0px 10px;
-    font-size: 40px;
-    font-size: 4.0rem;
+    padding: 0px 20px;
+    width: 100px;
   }
 }
 @media (min-width: 768px) {
@@ -219,6 +232,7 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 30px;
+    width: 120px;
   }
 }
 @media (min-width: 1024px) {
@@ -236,5 +250,6 @@ ul {
   #tn-page-container #tn-controls-container .control-block .player-controls {
     margin: 10px;
     padding: 0px 40px;
+    width: 180px;
   }
 }

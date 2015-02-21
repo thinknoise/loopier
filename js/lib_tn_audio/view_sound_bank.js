@@ -22,6 +22,9 @@ define([
         context    : new AudioContext(),
 
         initialize : function(){
+            $(this.el).append('<div class="loading">LOADING SOUNDS</div>');
+            this.render();
+
             //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
             _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'loadCompleteHandler', 'render', 'loadSound');
             this.collection.bind('add', this.addItemHandler);
@@ -48,6 +51,7 @@ define([
 
         loadCompleteHandler : function(){
             //console.log('loaded SoundBank without errors!');
+            $(this.el).find('.loading').remove();
             this.render();
 
         },

@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : audio_main
     Created on : Apr 6, 2014, 9:26:57 AM
     Author     : wiley
@@ -25,15 +25,15 @@
 @screen-lg-min : 1024px;
 
 
-root { 
+root {
     display: block;
 }
 
 body {
-    margin: 0px;    
+    margin: 0px;
     width: 100%;
     font-family     : Helvetica, Arial, sans-serif;
-    color           : #000;
+    color           : @colorEB;
     background-color: @color18;
 }
 h1 {
@@ -41,11 +41,11 @@ h1 {
     font-size       : 3.3rem;
     margin          : 0px
 }
-ul { 
+ul {
     list-style      : none;
-    margin-left     : 0px; 
+    margin-left     : 0px;
     padding-left    : 0px;
-} 
+}
 
 
 
@@ -138,7 +138,7 @@ ul {
                 font-size       : 0.8rem;
                 top             : -30px;
             }
-            opacity     : 0.8; 
+            opacity     : 0.8;
             box-shadow  : 2px 5px 8px @color21_5;
         }
 
@@ -156,7 +156,7 @@ ul {
                 background      : -webkit-linear-gradient( @start-color, @end-color );
                 background      :      -o-linear-gradient( @start-color, @end-color );
                 background      :    -moz-linear-gradient( @start-color, @end-color );
-                background      :         linear-gradient( @start-color, @end-color ); 
+                background      :         linear-gradient( @start-color, @end-color );
              }
 
             .mixing-track {
@@ -171,7 +171,7 @@ ul {
 
                 .sound-clone {
                     position        : absolute;
-                    opacity         : 0.7; 
+                    opacity         : 0.7;
                     padding-left    : 3px;
                     text-align      : left;
                 }
@@ -187,10 +187,23 @@ ul {
                     background-color: @colorDE;
                 }
                 .indicator {
-                    height          : 100%;
-                    width           : 0px;
-                    border-right    : 1px solid #FFF;
-                    margin-left     : 0px;
+                    z-index     : 1;
+                    position    : absolute;
+                    top          : 0px;
+                    height       : 100%;
+                    width        : 0px;
+                    border-right: 1px solid #FFF;
+                    margin-left : 0px;
+                }
+                .track-grid{
+                  z-index:10;
+                  height: 100%;
+                }
+                .marker {
+                  display: inline-block;
+                  height: 100%;
+                  width: 20%;
+                  border-right: 1px solid #aaaaaa;
                 }
             }
         }
@@ -227,7 +240,7 @@ ul {
 // end bootstrap over writes
 
 
-@media (min-width: @screen-sm-min) { 
+@media (min-width: @screen-sm-min) {
     body { background-color: @color21; }
 
     h1 {
@@ -272,7 +285,7 @@ ul {
         .sound-item {
             padding-left  : 17px;
             padding-right : 17px;
-        } 
+        }
     }
     #tn-page-container{
         .audio-button {
