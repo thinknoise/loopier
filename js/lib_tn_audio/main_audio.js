@@ -83,11 +83,6 @@ require([
         url: 'json/channel.json'
     });
 
-    // create the instance of Sound_Bank_View collection:
-    var instrumentCollection = new InstrumentCollection();
-    var soundBank = new Sound_Bank_View({ collection: instrumentCollection });
-    soundBank.load();
-
     // create the instance of control collection:
     var controlCollection = new ControlCollection();
     var controlPanel = new Control_Panel_View({ collection: controlCollection });
@@ -98,10 +93,14 @@ require([
     var tapeReelView = new Tape_Reel_View({ collection: channelCollection });
     tapeReelView.load();
 
-    console.log('start');
-    window.TN_sndbank = instrumentCollection;
-    window.TN_tapereel = tapeReelView;
+    // create the instance of Sound_Bank_View collection:
+    var instrumentCollection = new InstrumentCollection();
+    var soundBank = new Sound_Bank_View({ collection: instrumentCollection });
+    soundBank.load();
+
     window.TN_controls = controlPanel;
+    window.TN_tapereel = tapeReelView;
+    window.TN_sndbank = instrumentCollection;
 
 
 });

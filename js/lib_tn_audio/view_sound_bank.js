@@ -19,11 +19,14 @@ define([
         tagName    : "ul",
         className  : "sound-bank-wrap",
         events     : {},
-        context    : new AudioContext(),
+        context    : {},
 
         initialize : function(){
             $(this.el).append('<div class="loading">LOADING SOUNDS</div>');
             this.render();
+
+            window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            this.context = new AudioContext();
 
             //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
             _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'loadCompleteHandler', 'render', 'loadSound');
@@ -78,7 +81,7 @@ define([
             // Decode asynchronously
             request.onload = function( ) {
                 // TODO: listen to the loading
-                context.decodeAudioData(request.response, function(buffer) {
+                self.context.decodeAudioData(request.response, function(buffer) {
                     var modelBuffer = {
                         index       : request.buttonIndex,
                         audioBuffer : buffer,

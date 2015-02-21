@@ -25,8 +25,8 @@ define([
 
         initialize: function() {
             //console.log('begin');
-            window.AudioContext = window.AudioContext||window.webkitAudioContext;
-            context = new AudioContext();
+            //window.AudioContext = window.AudioContext||window.webkitAudioContext;
+            //context = new AudioContext();
         },
 
         doLoop: function( cloneData, totalTime ) {
