@@ -84,41 +84,34 @@ define([
             this.trackWidth = trackWidth;
 
         },
+        putScheduleOnTrack: function ( SoundBank ) {
+            var self = this;
+            // track model
+            models = self.collection.models;
+            _.each( models, function ( reel, index ) {
+                if( reel.get('urlSchedule') ) {
+                    var urlSchedule = reel.get('urlSchedule');
+                    //console.log(urlSchedule);
+                    _.each( urlSchedule, function ( item, index ) {
+                        self.makeClone( SoundBank.$el.find('.sound-item [data-sound-index='+item.snd_id+']'), item.percentage, item.track );
+                    });
+                }
+            });
+        },
         codifyDomToLoop : function () {
-          var $track       = this.$el.find('.mixing-track'),
-              $clones      = this.$el.find('.sound-clone'),
-              trackLength  = this.trackWidth,
-              leftOffset   = this.$el.offset().left,
-              timeLength   = this.totalTime,
-              loopUrl      = "",
-              loopSchedule = [];
+            var $clones      = $(this.$el.find('.sound-clone')),
+                trackLength  = this.trackWidth,
+                leftOffset   = this.$el.offset().left,
+                timeLength   = this.totalTime,
+                loopSchedule = [],
+                self = this;
 
-          $clones.each( function () {
-              //this is where its taken from the DOM and
-              var $clone         = $(this),
-                  soundIndex     = $clone.data('sound-index'),// this should come from soundbank model - cant until this is seporrated from the router
-                  left           = parseInt( $clone.css('left') ),// - leftOffset,
-                  percentOfTime  = left/trackLength,
-                  startEventTime = ( (timeLength/1000) * percentOfTime ),
-                  trackNo        = $clone.parent().index();
-
-              //console.log( parseInt( $clone.css('left') ), $("#track-container").offset().left, percentOfTime );
-              //should loopSchedule be a model?
-              loopSchedule.push({
-                  instmodel   : TN_sndbank.models[ soundIndex ],
-                  time        : startEventTime,
-                  track       : $clone.parent().index()
-              });
-              loopUrl += soundIndex + ":" + Math.round(percentOfTime*100) + ":" + trackNo + ","
-          });
-          loopUrl = loopUrl.substr(0, (loopUrl.length-1) ) + "/cycle/2000";
-          // when should this happen
-          this.router.navigate("loop/" + loopUrl, true);
-          this.collection.models[0].set('urlSchedule', loopSchedule );
+            loopSchedule = this.router.buildSchedule( $clones, trackLength );
 
         },
         startTapeLoop : function () {
-            $clones      = this.$el.find('.sound-clone')
+            $clones = this.$el.find('.sound-clone');
+
             if($clones.length) {
                 this.playSchedule();
             } else {
@@ -128,9 +121,16 @@ define([
             }
         },
         playSchedule : function () {
-            var seqSchedule = this.collection.models[0].get('urlSchedule')
-            _.each(seqSchedule, function ( seqItem ) {
-                seqItem.instmodel.playSound( seqItem.time);
+            var seqSchedule = [],
+                self = this;
+
+            _.each( self.collection.models, function ( model ) {
+                var track_items = model.get('urlSchedule');
+
+                _.each( track_items, function ( item ) {
+                    TN_sndbank.models[ item.snd_id ].playSound( item.time);
+                })
+
             });
 
             var $track      = this.$el.find('.mixing-track'),
@@ -167,6 +167,43 @@ define([
                 })
             });
             this.codifyDomToLoop();
+        },
+        makeClone : function ( $master, percentOnTrack, trackNo ) {
+
+            if( !$master.hasClass('sound-clone') ) {
+                //
+                var $cloneParent = $('.mixing-track').eq(trackNo),
+                    $clone = $master.clone(),
+                    index  = $clone.data('sound-index');
+
+                $clone.addClass('sound-clone' )
+                        .removeClass('audio-button draggable ui-draggable ')
+                        .appendTo( $cloneParent )
+                        .draggable({
+                           snap     : '.mixing-track',
+                           snapMode : 'inner',
+                           stop     : this.madeCloneStop
+                        })
+                        .on( 'click', function (e) {
+                            TN_sndbank.models[index].playSound(0);
+                        });
+
+                var leftAdjust = percentOnTrack * $cloneParent.width();
+                //console.log( TN_sndbank.models[index].get('width'));
+                $clone.css({ 'width': TN_sndbank.models[index].get('width'), left: leftAdjust, top: "0px" });
+
+            }
+        },
+        madeCloneStop : function ( event, ui ) {
+            //console.log( 'cloneStopped', ui );
+            if( $(this).hasClass('tracked') ) {
+                //this isn't pretty -
+                $(this).css({ top:'0px' });
+                $(this).removeClass('tracked');
+            } else {
+                $(this).remove();
+            }
+            TN_tapereel.codifyDomToLoop();
         },
         render : function(){
             //we assign our element into the available dom element

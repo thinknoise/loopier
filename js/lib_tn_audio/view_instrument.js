@@ -29,11 +29,6 @@ define([
         initialize : function(){
             _.bindAll(this, 'render', 'onStarting', 'onDragging' );
 
-            if(this.model) {
-                this.model.on('change',this.render,this);
-            }
-
-            //later we will see complex template engines, but is the basic from underscore
             this.template = _.template(
                 "<div class='btn btn-primary audio-player audio-button draggable' data-sound-index='<%= snd_id %>' data-icon='<%= glyphicon %>' data-sound-name='<%= name %>'>" +
                     //"<div class='clue-popup arrow_box'>drag me onto a track</div>" +

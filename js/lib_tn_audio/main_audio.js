@@ -73,9 +73,24 @@ require([
         url: 'json/controls.json'
     });
 
-    var InstrumentCollection = Backbone.Collection.extend({
+    var SoundBankCollection = Backbone.Collection.extend({
         model: Instrument_Model,
-        url: 'json/instruments.json'
+        url: 'json/instruments.json',
+        initialize : function () {
+            this.on( "change:sndLoaded", this.onModelSoundLoadComplete, this);
+            // should turn this off after completing all of them
+        },
+        onModelSoundLoadComplete : function () {
+            var allCompleted = 1;
+            _.each( this.models, function ( model, index ) {
+                var loaded = model.get('sndLoaded');
+                allCompleted *= loaded;
+            });
+            // all of them need to be true to equal 1
+            if ( allCompleted ) {
+                TN_tapereel.putScheduleOnTrack( TN_sndbank_view );
+            }
+        }
     });
 
     var ChannelCollection = Backbone.Collection.extend({
@@ -94,13 +109,15 @@ require([
     tapeReelView.load();
 
     // create the instance of Sound_Bank_View collection:
-    var instrumentCollection = new InstrumentCollection();
-    var soundBank = new Sound_Bank_View({ collection: instrumentCollection });
+    var soundBankCollection = new SoundBankCollection();
+    var soundBank = new Sound_Bank_View({ collection: soundBankCollection });
     soundBank.load();
+
 
     window.TN_controls = controlPanel;
     window.TN_tapereel = tapeReelView;
-    window.TN_sndbank = instrumentCollection;
+    window.TN_sndbank_view = soundBank;
+    window.TN_sndbank = soundBankCollection;
 
 
 });
