@@ -84,6 +84,9 @@ define([
 
             var playBtn_m = this.collection.findWhere({ contolClass : "control-play"});
 
+            // this is where I should broadcast StartSchedule
+
+            $.publish('tn:StartSchedule')
             var isStarted = TN_tapereel.playSchedule();
             if( isStarted ) {
                 this.setControlState( "control-play", true )

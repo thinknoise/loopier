@@ -91,7 +91,7 @@ define([
             _.each( models, function ( reel, index ) {
                 if( reel.get('urlSchedule') ) {
                     var urlSchedule = reel.get('urlSchedule');
-                    //console.log(urlSchedule);
+                    console.log(urlSchedule);
                     _.each( urlSchedule, function ( item, index ) {
                         self.makeClone( SoundBank.$el.find('.sound-item [data-sound-index='+item.snd_id+']'), item.percentage, item.track );
                     });
@@ -189,6 +189,7 @@ define([
                         });
 
                 var leftAdjust = percentOnTrack * $cloneParent.width();
+                // set width
                 //console.log( TN_sndbank.models[index].get('width'));
                 $clone.css({ 'width': TN_sndbank.models[index].get('width'), left: leftAdjust, top: "0px" });
 
