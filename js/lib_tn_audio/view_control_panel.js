@@ -86,7 +86,7 @@ define([
 
             // this is where I should broadcast StartSchedule
 
-            $.publish('tn:StartSchedule')
+            //$.publish('tn:StartSchedule')
             var isStarted = TN_tapereel.playSchedule();
             if( isStarted ) {
                 this.setControlState( "control-play", true )

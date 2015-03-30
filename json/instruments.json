@@ -8,136 +8,136 @@
     },
     {
         "snd_id"    : 1,
+        "url"       : "audio/Drums/analog_kit/dxKik01_loud.wav",
+        "name"      : "Kick Loud",
+        "icon"      : "icon-table-tennis",
+        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
+    },
+    {
+        "snd_id"    : 2,
         "url"       : "audio/Can of Soda Opened.wav",
         "name"      : "Flip Top",
         "icon"      : "icon icon-can",
         "glyphicon" : "glyphicon glyphicon-sort-by-attributes-alt"
     },
     {
-        "snd_id"    : 2,
+        "snd_id"    : 3,
         "url"       : "audio/Plastic Zipper Short.wav",
         "name"      : "Zipper",
         "icon"      : "icon icon-sweater",
         "glyphicon" : "glyphicon glyphicon-sort-by-attributes-alt"
     },
     {
-        "snd_id"    : 3,
+        "snd_id"    : 4,
         "url"       : "audio/Water Drip 02.wav",
         "name"      : "Drip",
         "icon"      : "icon icon-tint",
         "glyphicon" : "glyphicon glyphicon-tint"
     },
     {
-        "snd_id"    : 4,
+        "snd_id"    : 5,
         "url"       : "audio/Switch 09.wav",
         "name"      : "Switch",
-        "icon"      : "icon-briefcase", 
+        "icon"      : "icon-briefcase",
         "glyphicon" : "glyphicon glyphicon-briefcase"
     },
     {
-        "snd_id"    : 5,
+        "snd_id"    : 6,
         "url"       : "audio/Briefcase Latch 2.wav",
         "name"      : "Latch",
         "icon"      : "icon-briefcase",
         "glyphicon" : "glyphicon glyphicon-briefcase"
     },
     {
-        "snd_id"    : 6,
+        "snd_id"    : 7,
         "url"       : "audio/percussion/bongo-hi-edge.wav",
         "name"      : "Bongo hi",
         "icon"      : "icon-pushpin",
         "glyphicon" : "glyphicon glyphicon-pushpin"
     },
     {
-        "snd_id"    : 7,
+        "snd_id"    : 8,
         "url"       : "audio/percussion/bongo-lo-hrd.wav",
         "name"      : "Bongo low",
         "icon"      : "icon-globe",
         "glyphicon" : "glyphicon glyphicon-globe"
     },
     {
-        "snd_id"    : 8,
+        "snd_id"    : 9,
         "url"       : "audio/percussion/cowbell.wav",
         "name"      : "Cowbell",
         "icon"      : "icon-map-marker",
         "glyphicon" : "glyphicon glyphicon-map-marker"
     },
     {
-        "snd_id"    : 9,
+        "snd_id"    : 10,
         "url"       : "audio/percussion/caxixi-1.wav",
         "name"      : "Caxixi",
         "icon"      : "icon-grater",
         "glyphicon" : "glyphicon glyphicon-certificate"
     },
     {
-        "snd_id"    : 10,
+        "snd_id"    : 11,
         "url"       : "audio/percussion/ping.wav",
         "name"      : "pingpong",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
-        "snd_id"    : 11,
+        "snd_id"    : 12,
         "url"       : "audio/percussion/tamb-hit.wav",
         "name"      : "Tamborine",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-screenshot"
     },
     {
-        "snd_id"    : 12,
+        "snd_id"    : 13,
         "url"       : "audio/percussion/doumbek-thumbslap.wav",
         "name"      : "Doumbek1",
         "icon"      : "icon-grater",
         "glyphicon" : "glyphicon glyphicon-certificate"
     },
     {
-        "snd_id"    : 13,
+        "snd_id"    : 14,
         "url"       : "audio/percussion/doumbek-hand.wav",
         "name"      : "Doumbek2",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
-        "snd_id"    : 14,
+        "snd_id"    : 15,
         "url"       : "audio/Drums/acoustic_kit/hat-closed.wav",
         "name"      : "Hat Closed",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-screenshot"
     },
     {
-        "snd_id"    : 15,
+        "snd_id"    : 16,
         "url"       : "audio/Drums/acoustic_kit/hat-open.wav",
         "name"      : "Hat Open",
         "icon"      : "icon-grater",
         "glyphicon" : "glyphicon glyphicon-certificate"
     },
     {
-        "snd_id"    : 16,
+        "snd_id"    : 17,
         "url"       : "audio/Drums/acoustic_kit/snare-1.wav",
         "name"      : "Snare1",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
-        "snd_id"    : 17,
+        "snd_id"    : 18,
         "url"       : "audio/Drums/acoustic_kit/snare-2.wav",
         "name"      : "Snare2",
         "icon"      : "icon-table-tennis",
         "glyphicon" : "glyphicon glyphicon-screenshot"
     },
     {
-        "snd_id"    : 18,
+        "snd_id"    : 19,
         "url"       : "audio/Drums/analog_kit/ana-clap.wav",
         "name"      : "clap",
         "icon"      : "icon-grater",
         "glyphicon" : "glyphicon glyphicon-certificate"
-    },
-    {
-        "snd_id"    : 19,
-        "url"       : "audio/Drums/analog_kit/dxKik01_loud.wav",
-        "name"      : "Kick Loud",
-        "icon"      : "icon-table-tennis",
-        "glyphicon" : "glyphicon glyphicon-exclamation-sign"
     },
     {
         "snd_id"    : 20,

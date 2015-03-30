@@ -7,10 +7,12 @@ require.config({
         'viewChannel'       : './view_channel',
         'viewInstrument'    : './view_instrument',
         'viewSoundBank'     : './view_sound_bank',
+        'viewSoundcloudBank': './view_soundcloud_bank',
         'viewTapeReel'      : './view_tape_reel',
         'routerLoop'        : './router_loop',
         'underscore'        : '../lib/underscore',
         'backbone'          : '../lib/backbone',
+        'soundcloud'        : 'http://connect.soundcloud.com/sdk',
         'jQuery'            : '../lib/jquery',
         'jQueryUI'          : '../lib/jquery-ui-1.10.4.min',
         'jQueryTouch'       : '../lib/jquery.ui.touch-punch.min'
@@ -21,16 +23,19 @@ require.config({
         },
         'jQueryUI': {
             deps: ['jQuery']
-         },
+        },
         'jQueryTouch': {
             deps: ['jQueryUI']
-         },
+        },
         'underscore': {
             exports: '_'
         },
         'backbone': {
             deps: ['underscore', 'jQuery'],
             exports: "Backbone"
+        },
+        'soundcloud' : {
+            exports: 'SC'
         }
     }
 });
@@ -42,9 +47,11 @@ require([
     'viewChannel',
     'viewInstrument',
     'viewSoundBank',
+    'viewSoundcloudBank',
     'viewTapeReel',
     'routerLoop',
     'backbone',
+    'soundcloud',
     'underscore',
     'jQuery',
     'jQueryUI',
@@ -59,15 +66,19 @@ require([
     Channel_View,
     Instrument_View,
     Sound_Bank_View,
+    Soundcloud_Bank_View,
     Tape_Reel_View,
     Loop_Router,
     Backbone,
+    SC,
     _,
     $
 
 ) {
+    console.log ('start')
 
-    //We define the collection, associate the map for every item in the list
+    // initialize client with app credentials
+    // We define the collection, associate the map for every item in the list
     var ControlCollection = Backbone.Collection.extend({
         model: Knob_Model,
         url: 'json/controls.json'
@@ -113,11 +124,10 @@ require([
     var soundBank = new Sound_Bank_View({ collection: soundBankCollection });
     soundBank.load();
 
+    var soundcloudBank = new Soundcloud_Bank_View();
 
     window.TN_controls = controlPanel;
     window.TN_tapereel = tapeReelView;
     window.TN_sndbank_view = soundBank;
     window.TN_sndbank = soundBankCollection;
-
-
 });

@@ -13,7 +13,7 @@ define([
 
 ) {
   //Individual Sample
-  var Instrument_Model = Backbone.Model.extend({
+  var Soundcloud_Instrument_Model = Backbone.Model.extend({
       defaults  : {
           name    : 'default',
           index   : '-1',
@@ -73,6 +73,6 @@ define([
       }
   });
 
-  return Instrument_Model;
+  return Soundcloud_Instrument_Model;
 
 });
