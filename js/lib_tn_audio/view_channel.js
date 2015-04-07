@@ -86,7 +86,9 @@ define([
                             drop     : this.cloneDropped,
                             stop     : this.cloneStopped,
                          })
-                         .on( 'click', function (e) { TN_sndbank.models[$uiHelper.data('sound-index')].playSound(0) } );
+                         .on( 'click', function (e) { TN_scbank.get($uiHelper.data('sound-index')).playSoundCloud(0) } );
+
+
 
                 var leftAdjust = $clone.position().left - $cloneParent.offset().left + 10;
                 var topAdjust = 0;

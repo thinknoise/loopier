@@ -77,11 +77,13 @@ ul {
 #tn-page-container .tn-name {
   font-weight: 800;
 }
-#tn-page-container #tn-samples-container .sound-bank-wrap {
+#tn-page-container .soundcloud-bank-wrap .sound-bank-wrap,
+#tn-page-container .sound-bank-wrap .sound-bank-wrap {
   margin: 5px 4px;
   text-align: center;
 }
-#tn-page-container #tn-samples-container .sound-item {
+#tn-page-container .soundcloud-bank-wrap .sound-item,
+#tn-page-container .sound-bank-wrap .sound-item {
   display: inline-block;
 }
 #tn-page-container .sound-clone,
@@ -91,6 +93,11 @@ ul {
   line-height: 20px;
   margin: 0px;
   border: 1px solid #212121;
+}
+#tn-page-container .sound-clone i,
+#tn-page-container .audio-button i {
+  font-size: 14px;
+  font-size: 1.4em;
 }
 #tn-page-container .sound-clone .sound-name,
 #tn-page-container .audio-button .sound-name {

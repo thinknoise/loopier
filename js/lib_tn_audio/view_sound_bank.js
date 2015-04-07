@@ -43,6 +43,7 @@ define([
         },
         //we arrived  per item in list
         addItemHandler : function( model ){
+            //console.log(model);
             //model is an instance of Instrument_Model
             var instView = new Instrument_View({model:model});
             // load sound here

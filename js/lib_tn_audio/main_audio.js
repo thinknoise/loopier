@@ -1,11 +1,13 @@
 require.config({
     paths: {
         'modelInstrument'   : './model_instrument',
+        'modelSCInstrument'   : './model_SCinstrument',
         'modelChannel'      : './model_channel',
         'modelKnob'         : './model_knob',
         'viewControlPanel'  : './view_control_panel',
         'viewChannel'       : './view_channel',
         'viewInstrument'    : './view_instrument',
+        'viewSCInstrument'  : './view_SCinstrument',
         'viewSoundBank'     : './view_sound_bank',
         'viewSoundcloudBank': './view_soundcloud_bank',
         'viewTapeReel'      : './view_tape_reel',
@@ -41,11 +43,13 @@ require.config({
 });
 require([
     'modelInstrument',
+    'modelSCInstrument',
     'modelChannel',
     'modelKnob',
     'viewControlPanel',
     'viewChannel',
     'viewInstrument',
+    'viewSCInstrument',
     'viewSoundBank',
     'viewSoundcloudBank',
     'viewTapeReel',
@@ -60,11 +64,13 @@ require([
 ], function (
 
     Instrument_Model,
+    Soundcloud_Instrument_Model,
     Channel_Model,
     Knob_Model,
     Control_Panel_View,
     Channel_View,
     Instrument_View,
+    Soundcloud_Instrument_View,
     Sound_Bank_View,
     Soundcloud_Bank_View,
     Tape_Reel_View,
@@ -95,13 +101,33 @@ require([
             var allCompleted = 1;
             _.each( this.models, function ( model, index ) {
                 var loaded = model.get('sndLoaded');
+                // all of them need to be true to equal 1
                 allCompleted *= loaded;
             });
-            // all of them need to be true to equal 1
             if ( allCompleted ) {
-                TN_tapereel.putScheduleOnTrack( TN_sndbank_view );
+                //TN_tapereel.putScheduleOnTrack( TN_sndbank_view );
             }
         }
+    });
+
+    var SoundCloudCollection = Backbone.Collection.extend({
+        model: Soundcloud_Instrument_Model,
+        initialize : function () {
+            this.on( "change:sndLoaded", this.onModelSoundLoadComplete, this);
+            // should turn this off after completing all of them
+        },
+        onModelSoundLoadComplete : function () {
+            var allCompleted = 1;
+            _.each( this.models, function ( model, index ) {
+                var loaded = model.get('sndLoaded');
+                // all of them need to be true to equal 1
+                allCompleted *= loaded;
+            });
+            if ( allCompleted ) {
+                TN_tapereel.putScheduleOnTrack( soundcloudBank );
+            }
+        }
+
     });
 
     var ChannelCollection = Backbone.Collection.extend({
@@ -119,15 +145,23 @@ require([
     var tapeReelView = new Tape_Reel_View({ collection: channelCollection });
     tapeReelView.load();
 
+    // this is where I can add the sequence from ids
+    // channelCollection.add( 'whammo' );
+
     // create the instance of Sound_Bank_View collection:
     var soundBankCollection = new SoundBankCollection();
     var soundBank = new Sound_Bank_View({ collection: soundBankCollection });
     soundBank.load();
 
-    var soundcloudBank = new Soundcloud_Bank_View();
+    var soundCloudCollection = new SoundCloudCollection();
+    var soundcloudBank = new Soundcloud_Bank_View({ collection: soundCloudCollection });
+    soundcloudBank.load();
 
+    // icky
     window.TN_controls = controlPanel;
     window.TN_tapereel = tapeReelView;
+    window.TN_tapechannels = channelCollection;
     window.TN_sndbank_view = soundBank;
     window.TN_sndbank = soundBankCollection;
+    window.TN_scbank = soundCloudCollection;
 });

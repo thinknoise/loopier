@@ -128,7 +128,8 @@ define([
                 var track_items = model.get('urlSchedule');
 
                 _.each( track_items, function ( item ) {
-                    TN_sndbank.models[ item.snd_id ].playSound( item.time);
+                    //console.log('item', item)
+                    TN_scbank.get( item.snd_id ).playSoundCloud( item.time )
                 })
 
             });
@@ -185,14 +186,13 @@ define([
                            stop     : this.madeCloneStop
                         })
                         .on( 'click', function (e) {
-                            TN_sndbank.models[index].playSound(0);
+                            TN_scbank.get(index).playSound(0);
                         });
 
                 var leftAdjust = percentOnTrack * $cloneParent.width();
                 // set width
                 //console.log( TN_sndbank.models[index].get('width'));
-                $clone.css({ 'width': TN_sndbank.models[index].get('width'), left: leftAdjust, top: "0px" });
-
+                $clone.css({ 'width': TN_scbank.get(index).get('width'), left: leftAdjust, top: "0px" });
             }
         },
         madeCloneStop : function ( event, ui ) {
