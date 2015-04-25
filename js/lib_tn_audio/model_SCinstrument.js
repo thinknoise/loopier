@@ -45,18 +45,22 @@ define([
           request.open('GET', 'http://api.soundcloud.com/tracks/' + this.id + '/stream?client_id=' + this.get('clientID'), true);
           request.responseType = 'arraybuffer';
           // Decode asynchronously
-          request.onload = function () {
-              // TODO: listen to the loading
-              var audio_context = self.get("audio_context");
-              audio_context.decodeAudioData( request.response, function(buffer) {
-                  self.set( "width", (buffer.duration * 100) );
-                  self.set( "audioBuffer", buffer );
-                  self.set( "sndDuration", buffer.duration );
-                  self.set( "duration", buffer.duration.toFixed(1) + " secs" );
+          request.onreadystatechange = function ( e ) {
 
-              }, this.onLoadSoundError);
+              if( e.currentTarget.readyState == 4 && e.currentTarget.status == 200 ) {
+                  console.log( "state change", e.currentTarget.response, e.currentTarget.status );
+                  var audio_context = self.get("audio_context");
+                  audio_context.decodeAudioData( e.currentTarget.response, function(buffer) {
+                      console.log("-->",request.response);
+                      self.set( "width", (buffer.duration * 100) );
+                      self.set( "audioBuffer", buffer );
+                      self.set( "sndDuration", buffer.duration );
+                      self.set( "duration", buffer.duration.toFixed(1) + " secs" );
+
+                  }, this.onLoadSoundError);
+              }
           }
-          request.send();
+          request.send(null);
       },
       onTransferComplete : function ( event, snd_bank ) {
           // throwing back success to the sound bank

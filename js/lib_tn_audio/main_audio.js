@@ -90,26 +90,6 @@ require([
         url: 'json/controls.json'
     });
 
-    var SoundBankCollection = Backbone.Collection.extend({
-        model: Instrument_Model,
-        url: 'json/instruments.json',
-        initialize : function () {
-            this.on( "change:sndLoaded", this.onModelSoundLoadComplete, this);
-            // should turn this off after completing all of them
-        },
-        onModelSoundLoadComplete : function () {
-            var allCompleted = 1;
-            _.each( this.models, function ( model, index ) {
-                var loaded = model.get('sndLoaded');
-                // all of them need to be true to equal 1
-                allCompleted *= loaded;
-            });
-            if ( allCompleted ) {
-                //TN_tapereel.putScheduleOnTrack( TN_sndbank_view );
-            }
-        }
-    });
-
     var SoundCloudCollection = Backbone.Collection.extend({
         model: Soundcloud_Instrument_Model,
         initialize : function () {
@@ -124,7 +104,7 @@ require([
                 allCompleted *= loaded;
             });
             if ( allCompleted ) {
-                TN_tapereel.putScheduleOnTrack( soundcloudBank );
+                tapeReelView.putScheduleOnTrack( soundcloudBank );
             }
         }
 
@@ -148,11 +128,6 @@ require([
     // this is where I can add the sequence from ids
     // channelCollection.add( 'whammo' );
 
-    // create the instance of Sound_Bank_View collection:
-    var soundBankCollection = new SoundBankCollection();
-    var soundBank = new Sound_Bank_View({ collection: soundBankCollection });
-    soundBank.load();
-
     var soundCloudCollection = new SoundCloudCollection();
     var soundcloudBank = new Soundcloud_Bank_View({ collection: soundCloudCollection });
     soundcloudBank.load();
@@ -160,8 +135,5 @@ require([
     // icky
     window.TN_controls = controlPanel;
     window.TN_tapereel = tapeReelView;
-    window.TN_tapechannels = channelCollection;
-    window.TN_sndbank_view = soundBank;
-    window.TN_sndbank = soundBankCollection;
     window.TN_scbank = soundCloudCollection;
 });

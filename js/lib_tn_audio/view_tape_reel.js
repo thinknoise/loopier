@@ -93,6 +93,8 @@ define([
                     var urlSchedule = reel.get('urlSchedule');
                     console.log(urlSchedule);
                     _.each( urlSchedule, function ( item, index ) {
+                        // rather than get sound from bank, get it from soundcloud
+                        
                         self.makeClone( SoundBank.$el.find('.sound-item [data-sound-index='+item.snd_id+']'), item.percentage, item.track );
                     });
                 }

@@ -64,7 +64,6 @@ define([
                               case 'cc-by-nc-sa' : track.license = 'icon-cc-nc icon-cc-sa'; break;
 
                           }
-                          track.license = 'icon-cc-nd';
                           self.collection.add(track);
                       });
                   });

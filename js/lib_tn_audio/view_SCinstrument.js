@@ -32,7 +32,7 @@ define([
             this.template = _.template(
                 "<div class='btn btn-primary audio-player audio-button draggable' data-sound-index='<%= id %>' data-sound-name='<%= title %>'>" +
                     //"<div class='clue-popup arrow_box'>drag me onto a track</div>" +
-                    "<div class='sound-name'><%= title %></div>" +
+                    "<i class='<%= license %>' ></i><div class='sound-name'><%= title %></div>" +
                 "</div>"
             );
         },

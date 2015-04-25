@@ -90,19 +90,22 @@ ul {
 #tn-page-container .audio-button {
   position: relative;
   width: 104px;
-  line-height: 20px;
   margin: 0px;
   border: 1px solid #212121;
 }
 #tn-page-container .sound-clone i,
 #tn-page-container .audio-button i {
-  font-size: 14px;
-  font-size: 1.4em;
+  font-size: 12px;
+  font-size: 1.2em;
+  line-height: 16px;
+  padding-right: 8px;
+  float: left;
 }
 #tn-page-container .sound-clone .sound-name,
 #tn-page-container .audio-button .sound-name {
   font-size: 12px;
   font-size: 1.2rem;
+  line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
 }

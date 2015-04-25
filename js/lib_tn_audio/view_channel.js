@@ -86,7 +86,9 @@ define([
                             drop     : this.cloneDropped,
                             stop     : this.cloneStopped,
                          })
-                         .on( 'click', function (e) { TN_scbank.get($uiHelper.data('sound-index')).playSoundCloud(0) } );
+                         .on( 'click', function (e) {
+                             TN_scbank.get($uiHelper.data('sound-index')).playSoundCloud(0)
+                         } );
 
 
 
