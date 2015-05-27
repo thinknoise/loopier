@@ -1,5 +1,4 @@
 define([
-    'modelInstrument',
     'modelChannel',
     'modelKnob',
     'backbone',
@@ -9,7 +8,6 @@ define([
     'jQueryTouch'
 
 ], function (
-    Instrument_Model,
     Channel_Model,
     Knob_Model,
     Backbone,

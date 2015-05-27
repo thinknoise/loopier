@@ -24,12 +24,13 @@ define([
         totalTime  : 2000,
         sharedSchedule : [],
         events : {},
-        initialize : function(){
+        initialize : function(options){
             $(this.el).append('<div class="loading">LOADING tracks</div>');
             this.render();
             _.bindAll(this, 'addItemHandler', 'addTrackToReel', 'loadCompleteHandler', 'rescaleLoopClones', 'codifyDomToLoop', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
             $(window).on( 'resize', this.rescaleLoopClones );
+            options.vent.bind("playSchedule", this.playSchedule);
         },
         load : function(){
             // AJAX Request
@@ -94,7 +95,7 @@ define([
                     console.log(urlSchedule);
                     _.each( urlSchedule, function ( item, index ) {
                         // rather than get sound from bank, get it from soundcloud
-                        
+
                         self.makeClone( SoundBank.$el.find('.sound-item [data-sound-index='+item.snd_id+']'), item.percentage, item.track );
                     });
                 }

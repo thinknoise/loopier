@@ -1,16 +1,14 @@
 require.config({
     paths: {
-        'modelInstrument'   : './model_instrument',
-        'modelSCInstrument'   : './model_SCinstrument',
+        'modelSCInstrument' : './model_SCinstrument',
         'modelChannel'      : './model_channel',
         'modelKnob'         : './model_knob',
         'viewControlPanel'  : './view_control_panel',
         'viewChannel'       : './view_channel',
-        'viewInstrument'    : './view_instrument',
         'viewSCInstrument'  : './view_SCinstrument',
-        'viewSoundBank'     : './view_sound_bank',
-        'viewSoundcloudBank': './view_soundcloud_bank',
+        'viewSCBank'        : './view_SCbank',
         'viewTapeReel'      : './view_tape_reel',
+        'eventsControl'     : './events_control',
         'routerLoop'        : './router_loop',
         'underscore'        : '../lib/underscore',
         'backbone'          : '../lib/backbone',
@@ -42,17 +40,15 @@ require.config({
     }
 });
 require([
-    'modelInstrument',
     'modelSCInstrument',
     'modelChannel',
     'modelKnob',
     'viewControlPanel',
     'viewChannel',
-    'viewInstrument',
     'viewSCInstrument',
-    'viewSoundBank',
-    'viewSoundcloudBank',
+    'viewSCBank',
     'viewTapeReel',
+    'eventsControl',
     'routerLoop',
     'backbone',
     'soundcloud',
@@ -63,17 +59,15 @@ require([
 
 ], function (
 
-    Instrument_Model,
     Soundcloud_Instrument_Model,
     Channel_Model,
     Knob_Model,
     Control_Panel_View,
     Channel_View,
-    Instrument_View,
     Soundcloud_Instrument_View,
-    Sound_Bank_View,
     Soundcloud_Bank_View,
     Tape_Reel_View,
+    Events_Control,
     Loop_Router,
     Backbone,
     SC,
@@ -115,14 +109,17 @@ require([
         url: 'json/channel.json'
     });
 
+    // e vent aggrogation
+    var vent = _.extend({}, Backbone.Events);
+
     // create the instance of control collection:
     var controlCollection = new ControlCollection();
-    var controlPanel = new Control_Panel_View({ collection: controlCollection });
+    var controlPanel = new Control_Panel_View({ collection: controlCollection, vent: vent });
     controlPanel.load();
 
     // create the instance of track collection:
     var channelCollection = new ChannelCollection();
-    var tapeReelView = new Tape_Reel_View({ collection: channelCollection });
+    var tapeReelView = new Tape_Reel_View({ collection: channelCollection, vent: vent });
     tapeReelView.load();
 
     // this is where I can add the sequence from ids

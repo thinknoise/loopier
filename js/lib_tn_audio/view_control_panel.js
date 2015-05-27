@@ -1,4 +1,6 @@
 define([
+
+    'eventsControl',
     'backbone',
     'underscore',
     'jQuery',
@@ -7,6 +9,7 @@ define([
 
 ], function (
 
+    Events_Control,
     Backbone,
     _,
     $
@@ -45,11 +48,12 @@ define([
             "click .control-share"  : "onShareClick",
             "click .control-reset"  : "onResetTracks",
         },
-        initialize : function(){
+        initialize : function(options){
             $(this.el).append('<div class="loading">Loading Control Panel</div>');
             this.render();
             _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onPlusTrack', 'onMinusTrack', 'onChangeLoopState', 'onLastCall', 'onShareClick', 'setPlayButtonToPlay', 'onResetTracks' );
             this.collection.bind('add', this.addItemHandler);
+            this.vent = options.vent;
         },
         load : function(){      // AJAX Request
             this.collection.fetch({
@@ -84,16 +88,13 @@ define([
 
             var playBtn_m = this.collection.findWhere({ contolClass : "control-play"});
 
-            // this is where I should broadcast StartSchedule
+            // pubsub nugget
+            this.vent.trigger("playSchedule", this);
 
-            //$.publish('tn:StartSchedule')
-            var isStarted = TN_tapereel.playSchedule();
-            if( isStarted ) {
-                this.setControlState( "control-play", true )
-                $(".control-play").removeClass( playBtn_m.get("buttonIcon") +' '+ playBtn_m.get("contolClass") )
-                                  .addClass   ( playBtn_m.get("toggleIcon") +' '+ playBtn_m.get("toggleClass") );
-            }
+            this.setControlState( "control-play", true )
 
+            $(".control-play").removeClass( playBtn_m.get("buttonIcon") +' '+ playBtn_m.get("contolClass") )
+                               .addClass   ( playBtn_m.get("toggleIcon") +' '+ playBtn_m.get("toggleClass") );
         },
         onChangeLoopState : function ( event ) {
             var loop_m = this.collection.findWhere({ contolClass : "control-loop"});

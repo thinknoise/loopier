@@ -35,30 +35,38 @@ define([
       },
       loadSoundCloud : function ( sndBankView ) {
 
-          this.set( "audio_context", sndBankView.context );
-          var request    = new XMLHttpRequest(),
+            this.set( "audio_context", sndBankView.context );
+            var request    = new XMLHttpRequest(),
               trackWidth = $('.mixing-track').width,
               self       = this;
 
-          //this.set( "index ", this.get('snd_id') );
-          request.addEventListener("load", function( e ) { self.onTransferComplete( e, sndBankView ) }, false);
-          request.open('GET', 'http://api.soundcloud.com/tracks/' + this.id + '/stream?client_id=' + this.get('clientID'), true);
-          request.responseType = 'arraybuffer';
-          // Decode asynchronously
-          request.onreadystatechange = function ( e ) {
+            //this.set( "index ", this.get('snd_id') );
+            request.addEventListener("load", function( e ) { self.onTransferComplete( e, sndBankView ) }, false);
+            request.open('GET', 'http://api.soundcloud.com/tracks/' + this.id + '/stream?client_id=' + this.get('clientID'), true);
+            request.responseType = 'arraybuffer';
+            // Decode asynchronously
+            request.onreadystatechange = function ( e ) {
 
-              if( e.currentTarget.readyState == 4 && e.currentTarget.status == 200 ) {
-                  console.log( "state change", e.currentTarget.response, e.currentTarget.status );
-                  var audio_context = self.get("audio_context");
-                  audio_context.decodeAudioData( e.currentTarget.response, function(buffer) {
-                      console.log("-->",request.response);
-                      self.set( "width", (buffer.duration * 100) );
-                      self.set( "audioBuffer", buffer );
-                      self.set( "sndDuration", buffer.duration );
-                      self.set( "duration", buffer.duration.toFixed(1) + " secs" );
+              //console.log(e.currentTarget.readyState);
+            if (e.currentTarget.readyState === 4) {
+               if (e.currentTarget.status === 200) {
+                   var audio_context = self.get("audio_context");
+                   audio_context.decodeAudioData( e.currentTarget.response, function(buffer) {
 
-                  }, this.onLoadSoundError);
-              }
+                       //console.log("-->",buffer);
+
+                       self.set( "width", (buffer.duration * 100) );
+                       self.set( "audioBuffer", buffer );
+                       self.set( "sndDuration", buffer.duration );
+                       self.set( "duration", buffer.duration.toFixed(1) + " secs" );
+
+                   }, this.onLoadSoundError);
+                }
+            } else {
+               if ( e.currentTarget.status == 401) {
+                    console.log("Error", e.currentTarget);
+                }
+            }
           }
           request.send(null);
       },
