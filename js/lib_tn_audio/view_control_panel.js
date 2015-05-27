@@ -1,6 +1,4 @@
 define([
-
-    'eventsControl',
     'backbone',
     'underscore',
     'jQuery',
@@ -8,8 +6,6 @@ define([
     'jQueryTouch'
 
 ], function (
-
-    Events_Control,
     Backbone,
     _,
     $
