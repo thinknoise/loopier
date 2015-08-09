@@ -85,10 +85,9 @@ define([
                             stop     : this.cloneStopped,
                          })
                          .on( 'click', function (e) {
+                             // icky old hack
                              TN_scbank.get($uiHelper.data('sound-index')).playSoundCloud(0)
                          } );
-
-
 
                 var leftAdjust = $clone.position().left - $cloneParent.offset().left + 10;
                 var topAdjust = 0;

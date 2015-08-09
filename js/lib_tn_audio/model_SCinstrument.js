@@ -29,20 +29,23 @@ define([
       },
 
       initialize : function(){
-
-          //This is useful to bind(or delegate) the this keyword inside all the function objects to the view
           _.bindAll(this, 'loadSoundCloud', 'playSoundCloud' );
       },
       loadSoundCloud : function ( sndBankView ) {
-
-            this.set( "audio_context", sndBankView.context );
-            var request    = new XMLHttpRequest(),
+          // maybe switch the audio context back to the control panel so I don't have to dig through two different models
+          if( sndBankView.context) {
+              this.set( "audio_context", sndBankView.context );
+          } else {
+              this.set( "audio_context", sndBankView.get("audio_context") );
+          }
+          var request    = new XMLHttpRequest(),
               trackWidth = $('.mixing-track').width,
               self       = this;
 
             //this.set( "index ", this.get('snd_id') );
             request.addEventListener("load", function( e ) { self.onTransferComplete( e, sndBankView ) }, false);
             request.open('GET', 'http://api.soundcloud.com/tracks/' + this.id + '/stream?client_id=' + this.get('clientID'), true);
+            console.log( 'http://api.soundcloud.com/tracks/' + this.id + '/stream?client_id=' + this.get('clientID') );
             request.responseType = 'arraybuffer';
             // Decode asynchronously
             request.onreadystatechange = function ( e ) {
@@ -52,9 +55,6 @@ define([
                if (e.currentTarget.status === 200) {
                    var audio_context = self.get("audio_context");
                    audio_context.decodeAudioData( e.currentTarget.response, function(buffer) {
-
-                       //console.log("-->",buffer);
-
                        self.set( "width", (buffer.duration * 100) );
                        self.set( "audioBuffer", buffer );
                        self.set( "sndDuration", buffer.duration );
@@ -72,6 +72,7 @@ define([
       },
       onTransferComplete : function ( event, snd_bank ) {
           // throwing back success to the sound bank
+          console.log('sndLoaded')
           this.set( 'sndLoaded', true );
       },
       onLoadSoundError : function ( error ) {

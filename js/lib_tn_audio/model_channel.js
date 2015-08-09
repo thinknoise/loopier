@@ -21,7 +21,7 @@ define([
             urlSchedule : []
         },
         initialize : function(){
-            //_.bindAll(this, 'playSound');
+            //_.bindAll(this, 'playAround');
         },
         // TODO: maybe line up sequences here
 

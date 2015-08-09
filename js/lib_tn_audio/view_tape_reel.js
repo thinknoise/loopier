@@ -1,4 +1,5 @@
 define([
+    'viewSCInstrument',
     'viewChannel',
     'modelChannel',
     'routerLoop',
@@ -9,6 +10,7 @@ define([
     'jQueryTouch'
 
 ], function (
+    Soundcloud_Instrument_View,
     Channel_View,
     Channel_Model,
     Loop_Router,
@@ -30,7 +32,7 @@ define([
             _.bindAll(this, 'addItemHandler', 'addTrackToReel', 'loadCompleteHandler', 'rescaleLoopClones', 'codifyDomToLoop', 'startTapeLoop', 'playSchedule', 'stopSequence', 'onClearTapeReel', 'render' );
             this.collection.bind('add', this.addItemHandler);
             $(window).on( 'resize', this.rescaleLoopClones );
-            options.vent.bind("playSchedule", this.playSchedule);
+            options.appEvent.bind("playSchedule", this.playSchedule);
         },
         load : function(){
             // AJAX Request
@@ -85,18 +87,30 @@ define([
             this.trackWidth = trackWidth;
 
         },
-        putScheduleOnTrack: function ( SoundBank ) {
+        putScheduleOnTrack: function ( soundbankCollection ) {
             var self = this;
-            // track model
+            // channel models
             models = self.collection.models;
-            _.each( models, function ( reel, index ) {
-                if( reel.get('urlSchedule') ) {
-                    var urlSchedule = reel.get('urlSchedule');
+            console.log(models) // channel models
+            _.each( models, function ( channel, index ) {
+                if( channel.get('urlSchedule') ) {
+                    var urlSchedule = channel.get('urlSchedule');
                     console.log(urlSchedule);
                     _.each( urlSchedule, function ( item, index ) {
-                        // rather than get sound from bank, get it from soundcloud
+                        var $mixingTrack = $(self.$el.find('.mixing-track')[item.track]);
+                        var sndModel     = soundbankCollection.get( item.snd_id );
+                        var instView     = new Soundcloud_Instrument_View({model:sndModel});
 
-                        self.makeClone( SoundBank.$el.find('.sound-item [data-sound-index='+item.snd_id+']'), item.percentage, item.track );
+                        console.log( '---- ', item.snd_id, soundbankCollection, $mixingTrack.eq(item.track)  );
+                        sndModel.loadSoundCloud( sndModel );
+                        instView.render();
+                        // set make it a clone ish
+                        var newSndItem = instView.$el.find('.btn');
+                        var leftAdjust = item.percentage * $mixingTrack.width();
+                        $(newSndItem).removeClass('audio-button').addClass('sound-clone')
+                        $(newSndItem).css({ 'width': sndModel.get('width'), left: leftAdjust, top: "0px" });
+                        $mixingTrack.append( newSndItem );
+
                     });
                 }
             });
@@ -192,9 +206,9 @@ define([
                             TN_scbank.get(index).playSound(0);
                         });
 
-                var leftAdjust = percentOnTrack * $cloneParent.width();
+                var leftAdjust = item.percentage * $cloneParent.width();
                 // set width
-                //console.log( TN_sndbank.models[index].get('width'));
+                console.log( TN_sndbank.models[index].get('width'));
                 $clone.css({ 'width': TN_scbank.get(index).get('width'), left: leftAdjust, top: "0px" });
             }
         },

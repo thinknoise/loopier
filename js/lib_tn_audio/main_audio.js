@@ -93,30 +93,42 @@ require([
                 var loaded = model.get('sndLoaded');
                 // all of them need to be true to equal 1
                 allCompleted *= loaded;
+                if(!allCompleted) return false; // just a tad faster
             });
             if ( allCompleted ) {
-                tapeReelView.putScheduleOnTrack( soundcloudBank );
+                console.log('onModelSoundLoadComplete - allCompleted');
+
+                tapeReelView.putScheduleOnTrack( soundCloudCollection );
+                this.off( "change:sndLoaded");
             }
         }
 
     });
+
+    // e- appEvent aggrogation pubsub nugget
+    var appEvent = _.extend({}, Backbone.Events);
+
+    // create the instance of control collection:
+    var controlCollection = new ControlCollection();
+    var controlPanel = new Control_Panel_View({
+        collection  : controlCollection,
+        appEvent    : appEvent
+    });
+    controlPanel.load();
 
     var ChannelCollection = Backbone.Collection.extend({
         model: Channel_Model,
         url: 'json/channel.json'
     });
 
-    // e vent aggrogation
-    var vent = _.extend({}, Backbone.Events);
-
-    // create the instance of control collection:
-    var controlCollection = new ControlCollection();
-    var controlPanel = new Control_Panel_View({ collection: controlCollection, vent: vent });
-    controlPanel.load();
-
     // create the instance of track collection:
     var channelCollection = new ChannelCollection();
-    var tapeReelView = new Tape_Reel_View({ collection: channelCollection, vent: vent });
+
+    var tapeReelView = new Tape_Reel_View({
+        collection  : channelCollection,
+        appEvent    : appEvent,
+
+    });
     tapeReelView.load();
 
     // this is where I can add the sequence from ids

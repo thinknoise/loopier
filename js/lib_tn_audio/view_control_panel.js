@@ -49,7 +49,7 @@ define([
             this.render();
             _.bindAll(this,'addItemHandler', 'loadCompleteHandler', 'render', 'onPlaySequence', 'onPlusTrack', 'onMinusTrack', 'onChangeLoopState', 'onLastCall', 'onShareClick', 'setPlayButtonToPlay', 'onResetTracks' );
             this.collection.bind('add', this.addItemHandler);
-            this.vent = options.vent;
+            this.appEvent = options.appEvent;
         },
         load : function(){      // AJAX Request
             this.collection.fetch({
@@ -85,7 +85,7 @@ define([
             var playBtn_m = this.collection.findWhere({ contolClass : "control-play"});
 
             // pubsub nugget
-            this.vent.trigger("playSchedule", this);
+            this.appEvent.trigger("playSchedule", this);
 
             this.setControlState( "control-play", true )
 
